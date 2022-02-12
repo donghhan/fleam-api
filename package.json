@@ -1,0 +1,20 @@
+{
+  "name": "fleam-api",
+  "version": "1.0.0",
+  "description": "Fleam is the online E-commerce platform where we can exchange the vintage clothes.",
+  "main": "index.js",
+  "scripts": {
+    "dev": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/donghhan/fleam-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/donghhan/fleam-api/issues"
+  },
+  "homepage": "https://github.com/donghhan/fleam-api#readme"
+}
