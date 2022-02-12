@@ -4,7 +4,10 @@
   "description": "Fleam is the online E-commerce platform where we can exchange the vintage clothes.",
   "main": "index.js",
   "scripts": {
-    "dev": ""
+    "migrate": "npx prisma migrate dev --name init",
+    "dev": "nodemon --exec ts-node-dev --transpile-only --no-notify --exit-child src/server.ts",
+    "generate": "ts-node --transpile-only src/schema.ts",
+    "studio": "npx prisma studio"
   },
   "repository": {
     "type": "git",
@@ -16,5 +19,21 @@
   "bugs": {
     "url": "https://github.com/donghhan/fleam-api/issues"
   },
-  "homepage": "https://github.com/donghhan/fleam-api#readme"
+  "homepage": "https://github.com/donghhan/fleam-api#readme",
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.0",
+    "graphql-tools": "^8.2.0",
+    "nodemon": "^2.0.15",
+    "prisma": "^3.9.2",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.9.2",
+    "apollo-server": "^3.6.3",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.0",
+    "graphql": "^16.3.0",
+    "nexus": "^1.2.0"
+  }
 }
