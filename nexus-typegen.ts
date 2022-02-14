@@ -30,6 +30,11 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   Mutation: {};
   Query: {};
+  SigninResult: { // root type
+    error?: string | null; // String
+    ok: boolean; // Boolean!
+    token?: string | null; // String
+  }
   User: { // root type
     createdAt: string; // String!
     email: string; // String!
@@ -53,10 +58,16 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
-    createAccount: NexusGenRootTypes['User']; // User!
+    createAccount: NexusGenRootTypes['User'] | null; // User
+    signin: NexusGenRootTypes['SigninResult'] | null; // SigninResult
   }
   Query: { // field return type
-    seeprofile: NexusGenRootTypes['Query'] | null; // Query
+    seeProfile: NexusGenRootTypes['User'] | null; // User
+  }
+  SigninResult: { // field return type
+    error: string | null; // String
+    ok: boolean; // Boolean!
+    token: string | null; // String
   }
   User: { // field return type
     createdAt: string; // String!
@@ -72,9 +83,15 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createAccount: 'User'
+    signin: 'SigninResult'
   }
   Query: { // field return type name
-    seeprofile: 'Query'
+    seeProfile: 'User'
+  }
+  SigninResult: { // field return type name
+    error: 'String'
+    ok: 'Boolean'
+    token: 'String'
   }
   User: { // field return type name
     createdAt: 'String'
@@ -95,10 +112,13 @@ export interface NexusGenArgTypes {
       password: string; // String!
       username: string; // String!
     }
+    signin: { // args
+      password: string; // String!
+      username: string; // String!
+    }
   }
   Query: {
-    seeprofile: { // args
-      email: string; // String!
+    seeProfile: { // args
       username: string; // String!
     }
   }

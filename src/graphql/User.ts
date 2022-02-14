@@ -1,10 +1,17 @@
-import { objectType, extendType, nonNull, stringArg, queryField } from "nexus";
-import { NexusGenObjects } from "../../nexus-typegen";
-import CryptoJS from "crypto-js";
+import {
+  objectType,
+  nonNull,
+  stringArg,
+  queryField,
+  mutationField,
+} from "nexus";
+import bcrypt from "bcrypt";
 import client from "../client";
+import jwt from "jsonwebtoken";
 // Secret Key
 import { FLEAM_SECRET_KEY } from "../utils/keys";
 
+// User Type
 export const User = objectType({
   name: "User",
   definition(t) {
@@ -18,95 +25,123 @@ export const User = objectType({
   },
 });
 
-export const UserQuery = queryField("seeprofile", {
-  type: "Query",
-  args: {
-    username: nonNull(stringArg()),
-    email: nonNull(stringArg()),
-  },
-  resolve(parent, args, context) {
-    const { username, email } = args;
-    client.user.findUnique({ where: { username, email } });
+// Signin Type
+export const SigninResult = objectType({
+  name: "SigninResult",
+  definition(t) {
+    t.nonNull.boolean("ok"), t.string("error"), t.string("token");
   },
 });
 
-export const UserMutation = extendType({
-  type: "Mutation",
-  definition(t) {
-    t.nonNull.field("createAccount", {
-      type: "User",
-      args: {
-        firstName: nonNull(stringArg()),
-        username: nonNull(stringArg()),
-        email: nonNull(stringArg()),
-        password: nonNull(stringArg()),
+// Signin Mutation
+export const SigninMutation = mutationField("signin", {
+  type: "SigninResult",
+  args: {
+    username: nonNull(stringArg()),
+    password: nonNull(stringArg()),
+  },
+  async resolve(_, args, ctx) {
+    const { id, username, password } = args;
+
+    // Finding user with username
+    const registeredUser = await client.user.findFirst({
+      where: {
+        username,
       },
+    });
 
-      async resolve(parent, args, context) {
-        const { firstName, username, email, password } = args;
+    if (!registeredUser) {
+      return {
+        ok: false,
+        error: "There is no user with that username.",
+      };
+    }
 
-        // Check if username or email already exists
-        const alreadyExistingUser = await client.user.findFirst({
-          where: {
-            OR: [{ username }, { email }],
-          },
-        });
+    // Check password
+    const comparePassword = await bcrypt.compare(
+      password,
+      registeredUser.password
+    );
 
-        if (alreadyExistingUser) {
-          throw new Error("This username/password is already taken.");
-        }
+    if (!comparePassword) {
+      return {
+        ok: false,
+        error: "Password is not correct.",
+      };
+    }
 
-        // Validation
-        const REGEX = {
-          EMAIL: /\S+@\S+\.\S+/,
-          PASSWORD:
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        };
+    // Issue a token and send it to the user
+    const token = await jwt.sign(
+      { id: registeredUser.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 },
+      FLEAM_SECRET_KEY
+    );
 
-        // Email Validation
-        if (REGEX.EMAIL.test(email) === false) {
-          throw new Error("You should input correct format of email address.");
-        }
+    return {
+      ok: true,
+      token,
+    };
+  },
+});
 
-        // Password Validation
-        if (REGEX.PASSWORD.test(password) === false) {
-          throw new Error(
-            "Password must be at least 8 characters, including at least one of uppercase, lowercase, number and special character."
-          );
-        }
+// seeProfile Query
+export const UserQuery = queryField("seeProfile", {
+  type: "User",
+  args: {
+    username: nonNull(stringArg()),
+  },
+  resolve(_, args, ctx) {
+    const { username } = args;
+    return client.user.findUnique({ where: { username } });
+  },
+});
 
-        // Hashing password
-        const hashedPassword = await CryptoJS.AES.encrypt(
-          password,
-          FLEAM_SECRET_KEY
-        ).toString();
+// Signup Mutation
+export const CreateAccountMutation = mutationField("createAccount", {
+  type: "User",
+  args: {
+    firstName: nonNull(stringArg()),
+    username: nonNull(stringArg()),
+    email: nonNull(stringArg()),
+    password: nonNull(stringArg()),
+  },
+  async resolve(_, args, ctx) {
+    const { firstName, username, email, password } = args;
 
-        return client.user.create({
-          data: { username, email, firstName, password: hashedPassword },
-        });
+    // Check if username or email already exists
+    const alreadyExistingUser = await client.user.findFirst({
+      where: {
+        OR: [{ username }, { email }],
       },
+    });
+
+    if (alreadyExistingUser) {
+      throw new Error("This username/password is already taken.");
+    }
+
+    // Validation REGEX
+    const REGEX = {
+      EMAIL: /\S+@\S+\.\S+/,
+      PASSWORD:
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    };
+
+    // Email Validation
+    if (REGEX.EMAIL.test(email) === false) {
+      throw new Error("You should input correct format of email address.");
+    }
+
+    // Password Validation
+    if (REGEX.PASSWORD.test(password) === false) {
+      throw new Error(
+        "Password must be at least 8 characters, including at least one of uppercase, lowercase, number and special character."
+      );
+    }
+
+    // Hashing password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    return client.user.create({
+      data: { username, email, firstName, password: hashedPassword },
     });
   },
 });
-
-let users: NexusGenObjects["User"][] = [
-  // 1
-  {
-    id: 1,
-    firstName: "Donghoon",
-    email: "dhstar914@naver.com",
-    username: "dhstar914",
-    password: "abc123",
-    createdAt: "2021-01-02",
-    updatedAt: "2021-01-02",
-  },
-  {
-    id: 2,
-    firstName: "Jihyeong",
-    email: "lily9497@naver.com",
-    username: "lily9497",
-    password: "abcd1234",
-    createdAt: "2021-01-02",
-    updatedAt: "2021-01-02",
-  },
-];

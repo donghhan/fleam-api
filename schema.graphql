@@ -3,11 +3,18 @@
 
 
 type Mutation {
-  createAccount(email: String!, firstName: String!, password: String!, username: String!): User!
+  createAccount(email: String!, firstName: String!, password: String!, username: String!): User
+  signin(password: String!, username: String!): SigninResult
 }
 
 type Query {
-  seeprofile(email: String!, username: String!): Query
+  seeProfile(username: String!): User
+}
+
+type SigninResult {
+  error: String
+  ok: Boolean!
+  token: String
 }
 
 type User {
