@@ -4,24 +4,25 @@
 
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
-  signin(password: String!, username: String!): SigninResult
+  editProfile(email: String, firstName: String, password: String): OkResult
+  signin(password: String!, username: String!): OkResult
+}
+
+type OkResult {
+  error: String
+  ok: Boolean!
+  token: String
 }
 
 type Query {
   seeProfile(username: String!): User
 }
 
-type SigninResult {
-  error: String
-  ok: Boolean!
-  token: String
-}
-
 type User {
   createdAt: String!
   email: String!
   firstName: String!
-  id: Int!
+  id: String!
   password: String!
   updatedAt: String!
   username: String!

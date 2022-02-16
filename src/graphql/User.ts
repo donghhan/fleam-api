@@ -10,12 +10,14 @@ import client from "../client";
 import jwt from "jsonwebtoken";
 // Secret Key
 import { FLEAM_SECRET_KEY } from "../utils/keys";
+// Utils
+import { JwtPayload } from "jsonwebtoken";
 
 // User Type
 export const User = objectType({
   name: "User",
   definition(t) {
-    t.nonNull.int("id");
+    t.nonNull.string("id");
     t.nonNull.string("firstName");
     t.nonNull.string("email");
     t.nonNull.string("username");
@@ -27,7 +29,7 @@ export const User = objectType({
 
 // Signin Type
 export const SigninResult = objectType({
-  name: "SigninResult",
+  name: "OkResult",
   definition(t) {
     t.nonNull.boolean("ok"), t.string("error"), t.string("token");
   },
@@ -35,7 +37,7 @@ export const SigninResult = objectType({
 
 // Signin Mutation
 export const SigninMutation = mutationField("signin", {
-  type: "SigninResult",
+  type: "OkResult",
   args: {
     username: nonNull(stringArg()),
     password: nonNull(stringArg()),
@@ -143,5 +145,44 @@ export const CreateAccountMutation = mutationField("createAccount", {
     return client.user.create({
       data: { username, email, firstName, password: hashedPassword },
     });
+  },
+});
+
+// EditProfile Mutation
+export const EditProfileMutation = mutationField("editProfile", {
+  type: "OkResult",
+  args: {
+    firstName: stringArg(),
+    email: stringArg(),
+    password: stringArg(),
+  },
+  async resolve(_, args, ctx) {
+    const { firstName, email, password } = args;
+    const { signedInUser } = ctx;
+
+    let hashedPassword;
+
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    const updateComplete = await client.user.update({
+      where: { id: signedInUser?.id },
+      data: {
+        firstName,
+        email,
+        ...(hashedPassword && { password: hashedPassword }),
+      },
+    });
+
+    if (updateComplete.id) {
+      return {
+        ok: true,
+      };
+    } else {
+      return {
+        error: "Could not update the profile.",
+      };
+    }
   },
 });

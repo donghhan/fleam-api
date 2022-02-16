@@ -29,17 +29,17 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Mutation: {};
-  Query: {};
-  SigninResult: { // root type
+  OkResult: { // root type
     error?: string | null; // String
     ok: boolean; // Boolean!
     token?: string | null; // String
   }
+  Query: {};
   User: { // root type
     createdAt: string; // String!
     email: string; // String!
     firstName: string; // String!
-    id: number; // Int!
+    id: string; // String!
     password: string; // String!
     updatedAt: string; // String!
     username: string; // String!
@@ -59,21 +59,22 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
-    signin: NexusGenRootTypes['SigninResult'] | null; // SigninResult
+    editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
+    signin: NexusGenRootTypes['OkResult'] | null; // OkResult
   }
-  Query: { // field return type
-    seeProfile: NexusGenRootTypes['User'] | null; // User
-  }
-  SigninResult: { // field return type
+  OkResult: { // field return type
     error: string | null; // String
     ok: boolean; // Boolean!
     token: string | null; // String
+  }
+  Query: { // field return type
+    seeProfile: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
     createdAt: string; // String!
     email: string; // String!
     firstName: string; // String!
-    id: number; // Int!
+    id: string; // String!
     password: string; // String!
     updatedAt: string; // String!
     username: string; // String!
@@ -83,21 +84,22 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createAccount: 'User'
-    signin: 'SigninResult'
+    editProfile: 'OkResult'
+    signin: 'OkResult'
   }
-  Query: { // field return type name
-    seeProfile: 'User'
-  }
-  SigninResult: { // field return type name
+  OkResult: { // field return type name
     error: 'String'
     ok: 'Boolean'
     token: 'String'
+  }
+  Query: { // field return type name
+    seeProfile: 'User'
   }
   User: { // field return type name
     createdAt: 'String'
     email: 'String'
     firstName: 'String'
-    id: 'Int'
+    id: 'String'
     password: 'String'
     updatedAt: 'String'
     username: 'String'
@@ -111,6 +113,11 @@ export interface NexusGenArgTypes {
       firstName: string; // String!
       password: string; // String!
       username: string; // String!
+    }
+    editProfile: { // args
+      email?: string | null; // String
+      firstName?: string | null; // String
+      password?: string | null; // String
     }
     signin: { // args
       password: string; // String!
