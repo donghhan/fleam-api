@@ -10,8 +10,6 @@ import client from "../client";
 import jwt from "jsonwebtoken";
 // Secret Key
 import { FLEAM_SECRET_KEY } from "../utils/keys";
-// Utils
-import { JwtPayload } from "jsonwebtoken";
 
 // User Type
 export const User = objectType({
@@ -156,18 +154,21 @@ export const EditProfileMutation = mutationField("editProfile", {
     email: stringArg(),
     password: stringArg(),
   },
-  async resolve(_, args, ctx) {
-    const { firstName, email, password } = args;
-    const { signedInUser } = ctx;
+  async resolve(
+    _,
+    { firstName, email, password },
+    { signedInUser, protectorResolver }
+  ) {
+    protectorResolver(signedInUser);
 
-    let hashedPassword;
+    let hashedPassword = null;
 
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
     }
 
     const updateComplete = await client.user.update({
-      where: { id: signedInUser?.id },
+      where: { id: signedInUser.id },
       data: {
         firstName,
         email,
