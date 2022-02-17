@@ -6,7 +6,7 @@ export const server = new ApolloServer({
   schema,
   context: async ({ req }) => {
     return {
-      signedInUser: await getUser(req.headers.token),
+      signedInUser: await getUser(req.headers.authorization),
       protectorResolver,
     };
   },

@@ -36,9 +36,11 @@ export interface NexusGenObjects {
   }
   Query: {};
   User: { // root type
+    avatar?: string | null; // String
+    bio?: string | null; // String
     createdAt: string; // String!
     email: string; // String!
-    firstName: string; // String!
+    firstName?: string | null; // String
     id: string; // String!
     password: string; // String!
     updatedAt: string; // String!
@@ -71,9 +73,11 @@ export interface NexusGenFieldTypes {
     seeProfile: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
+    avatar: string | null; // String
+    bio: string | null; // String
     createdAt: string; // String!
     email: string; // String!
-    firstName: string; // String!
+    firstName: string | null; // String
     id: string; // String!
     password: string; // String!
     updatedAt: string; // String!
@@ -96,6 +100,8 @@ export interface NexusGenFieldTypeNames {
     seeProfile: 'User'
   }
   User: { // field return type name
+    avatar: 'String'
+    bio: 'String'
     createdAt: 'String'
     email: 'String'
     firstName: 'String'
@@ -115,6 +121,8 @@ export interface NexusGenArgTypes {
       username: string; // String!
     }
     editProfile: { // args
+      avatar?: string | null; // String
+      bio?: string | null; // String
       email?: string | null; // String
       firstName?: string | null; // String
       password?: string | null; // String

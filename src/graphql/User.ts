@@ -16,11 +16,13 @@ export const User = objectType({
   name: "User",
   definition(t) {
     t.nonNull.string("id");
-    t.nonNull.string("firstName");
+    t.string("firstName");
     t.nonNull.string("email");
     t.nonNull.string("username");
     t.nonNull.string("password");
     t.nonNull.string("createdAt");
+    t.string("bio");
+    t.string("avatar");
     t.nonNull.string("updatedAt");
   },
 });
@@ -153,18 +155,19 @@ export const EditProfileMutation = mutationField("editProfile", {
     firstName: stringArg(),
     email: stringArg(),
     password: stringArg(),
+    bio: stringArg(),
+    avatar: stringArg(),
   },
   async resolve(
     _,
-    { firstName, email, password },
+    { firstName, email, password: newPassword, bio, avatar },
     { signedInUser, protectorResolver }
   ) {
     protectorResolver(signedInUser);
-
     let hashedPassword = null;
 
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 10);
+    if (newPassword) {
+      hashedPassword = await bcrypt.hash(newPassword, 10);
     }
 
     const updateComplete = await client.user.update({
@@ -172,6 +175,8 @@ export const EditProfileMutation = mutationField("editProfile", {
       data: {
         firstName,
         email,
+        bio,
+        avatar,
         ...(hashedPassword && { password: hashedPassword }),
       },
     });
@@ -181,9 +186,7 @@ export const EditProfileMutation = mutationField("editProfile", {
         ok: true,
       };
     } else {
-      return {
-        error: "Could not update the profile.",
-      };
+      return { ok: false, error: "Could not update profile." };
     }
   },
 });

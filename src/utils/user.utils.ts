@@ -1,14 +1,18 @@
 import jwt from "jsonwebtoken";
 import client from "../client";
 import { FLEAM_SECRET_KEY } from "./keys";
+import { JwtPayload } from "./interface";
 
-export const getUser = async (token: any) => {
+export const getUser = async (authorization: any) => {
   try {
-    if (!token) {
+    if (!authorization) {
       return null;
     }
 
-    const { id } = (await jwt.verify(token, FLEAM_SECRET_KEY)) as any;
+    const { id } = (await jwt.verify(
+      authorization,
+      FLEAM_SECRET_KEY
+    )) as JwtPayload;
     const user = await client.user.findUnique({ where: { id } });
 
     if (user) {

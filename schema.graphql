@@ -4,7 +4,7 @@
 
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
-  editProfile(email: String, firstName: String, password: String): OkResult
+  editProfile(avatar: String, bio: String, email: String, firstName: String, password: String): OkResult
   signin(password: String!, username: String!): OkResult
 }
 
@@ -19,9 +19,11 @@ type Query {
 }
 
 type User {
+  avatar: String
+  bio: String
   createdAt: String!
   email: String!
-  firstName: String!
+  firstName: String
   id: String!
   password: String!
   updatedAt: String!
