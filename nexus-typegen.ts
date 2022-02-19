@@ -4,9 +4,23 @@
  */
 
 
-
-
-
+import type { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    /**
+     * The `Upload` scalar type represents a file upload.
+     */
+    upload<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "Upload";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    /**
+     * The `Upload` scalar type represents a file upload.
+     */
+    upload<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "Upload";
+  }
+}
 
 
 declare global {
@@ -25,6 +39,7 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  Upload: any
 }
 
 export interface NexusGenObjects {
@@ -63,6 +78,7 @@ export interface NexusGenFieldTypes {
     createAccount: NexusGenRootTypes['User'] | null; // User
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
     signin: NexusGenRootTypes['OkResult'] | null; // OkResult
+    updateProfileAvatar: NexusGenRootTypes['OkResult'] | null; // OkResult
   }
   OkResult: { // field return type
     error: string | null; // String
@@ -90,6 +106,7 @@ export interface NexusGenFieldTypeNames {
     createAccount: 'User'
     editProfile: 'OkResult'
     signin: 'OkResult'
+    updateProfileAvatar: 'OkResult'
   }
   OkResult: { // field return type name
     error: 'String'
@@ -121,7 +138,6 @@ export interface NexusGenArgTypes {
       username: string; // String!
     }
     editProfile: { // args
-      avatar?: string | null; // String
       bio?: string | null; // String
       email?: string | null; // String
       firstName?: string | null; // String
@@ -130,6 +146,9 @@ export interface NexusGenArgTypes {
     signin: { // args
       password: string; // String!
       username: string; // String!
+    }
+    updateProfileAvatar: { // args
+      avatar?: NexusGenScalars['Upload'] | null; // Upload
     }
   }
   Query: {

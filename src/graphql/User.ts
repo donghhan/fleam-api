@@ -1,13 +1,18 @@
+import { createWriteStream } from "fs";
 import {
   objectType,
   nonNull,
   stringArg,
   queryField,
   mutationField,
+  scalarType,
+  arg,
+  asNexusMethod,
 } from "nexus";
 import bcrypt from "bcrypt";
 import client from "../client";
 import jwt from "jsonwebtoken";
+import { GraphQLUpload } from "graphql-upload";
 // Secret Key
 import { FLEAM_SECRET_KEY } from "../utils/keys";
 
@@ -34,6 +39,8 @@ export const SigninResult = objectType({
     t.nonNull.boolean("ok"), t.string("error"), t.string("token");
   },
 });
+
+export const Upload = asNexusMethod(GraphQLUpload, "upload");
 
 // Signin Mutation
 export const SigninMutation = mutationField("signin", {
@@ -156,14 +163,14 @@ export const EditProfileMutation = mutationField("editProfile", {
     email: stringArg(),
     password: stringArg(),
     bio: stringArg(),
-    avatar: stringArg(),
   },
   async resolve(
     _,
-    { firstName, email, password: newPassword, bio, avatar },
+    { firstName, email, password: newPassword, bio },
     { signedInUser, protectorResolver }
   ) {
     protectorResolver(signedInUser);
+
     let hashedPassword = null;
 
     if (newPassword) {
@@ -176,7 +183,6 @@ export const EditProfileMutation = mutationField("editProfile", {
         firstName,
         email,
         bio,
-        avatar,
         ...(hashedPassword && { password: hashedPassword }),
       },
     });
@@ -190,3 +196,47 @@ export const EditProfileMutation = mutationField("editProfile", {
     }
   },
 });
+
+// Upload Profile Mutation
+export const UpdateProfileAvatarMutation = mutationField(
+  "updateProfileAvatar",
+  {
+    type: "OkResult",
+    args: {
+      avatar: arg({ type: "Upload" }),
+    },
+    async resolve(_, { avatar }, { signedInUser, protectorResolver }) {
+      protectorResolver(signedInUser);
+
+      let avatarUrl = null;
+
+      if (avatar) {
+        const { filename, createReadStream } = await avatar;
+        const newFilename = `${signedInUser.id}-${filename}`;
+        const readStream = createReadStream();
+        const writeStream = createWriteStream(
+          process.cwd() + "/uploads/" + filename
+        );
+        readStream.pipe(writeStream);
+        avatarUrl = `http://localhost:8090/graphql/static/${newFilename}`;
+      }
+
+      const updateAvatar = await client.user.update({
+        where: {
+          id: signedInUser.id,
+        },
+        data: {
+          ...(avatarUrl && { avatar: avatarUrl }),
+        },
+      });
+
+      if (updateAvatar.id) {
+        return {
+          ok: true,
+        };
+      } else {
+        return { ok: false, error: "Could not update profile avatar." };
+      }
+    },
+  }
+);

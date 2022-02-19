@@ -4,8 +4,9 @@
 
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
-  editProfile(avatar: String, bio: String, email: String, firstName: String, password: String): OkResult
+  editProfile(bio: String, email: String, firstName: String, password: String): OkResult
   signin(password: String!, username: String!): OkResult
+  updateProfileAvatar(avatar: Upload): OkResult
 }
 
 type OkResult {
@@ -17,6 +18,9 @@ type OkResult {
 type Query {
   seeProfile(username: String!): User
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   avatar: String
