@@ -43,6 +43,13 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  FollowerResult: { // root type
+    error?: string | null; // String
+    followers?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    ok: boolean; // Boolean!
+    totalPages?: number | null; // Int
+  }
   Mutation: {};
   OkResult: { // root type
     error?: string | null; // String
@@ -56,8 +63,12 @@ export interface NexusGenObjects {
     createdAt: string; // String!
     email: string; // String!
     firstName?: string | null; // String
+    followers?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     id: string; // String!
     password: string; // String!
+    totalFollower: number; // Int!
+    totalFollowing: number; // Int!
     updatedAt: string; // String!
     username: string; // String!
   }
@@ -74,11 +85,19 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  FollowerResult: { // field return type
+    error: string | null; // String
+    followers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    following: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    ok: boolean; // Boolean!
+    totalPages: number | null; // Int
+  }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
+    followUser: NexusGenRootTypes['OkResult'] | null; // OkResult
     signin: NexusGenRootTypes['OkResult'] | null; // OkResult
-    updateProfileAvatar: NexusGenRootTypes['OkResult'] | null; // OkResult
+    unfollowUser: NexusGenRootTypes['OkResult'] | null; // OkResult
   }
   OkResult: { // field return type
     error: string | null; // String
@@ -86,7 +105,9 @@ export interface NexusGenFieldTypes {
     token: string | null; // String
   }
   Query: { // field return type
-    seeProfile: NexusGenRootTypes['User'] | null; // User
+    seeFollower: NexusGenRootTypes['FollowerResult'] | null; // FollowerResult
+    seeFollowing: NexusGenRootTypes['FollowerResult'] | null; // FollowerResult
+    seeProfile: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   User: { // field return type
     avatar: string | null; // String
@@ -94,19 +115,31 @@ export interface NexusGenFieldTypes {
     createdAt: string; // String!
     email: string; // String!
     firstName: string | null; // String
+    followers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    following: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     id: string; // String!
     password: string; // String!
+    totalFollower: number; // Int!
+    totalFollowing: number; // Int!
     updatedAt: string; // String!
     username: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  FollowerResult: { // field return type name
+    error: 'String'
+    followers: 'User'
+    following: 'User'
+    ok: 'Boolean'
+    totalPages: 'Int'
+  }
   Mutation: { // field return type name
     createAccount: 'User'
     editProfile: 'OkResult'
+    followUser: 'OkResult'
     signin: 'OkResult'
-    updateProfileAvatar: 'OkResult'
+    unfollowUser: 'OkResult'
   }
   OkResult: { // field return type name
     error: 'String'
@@ -114,6 +147,8 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
   }
   Query: { // field return type name
+    seeFollower: 'FollowerResult'
+    seeFollowing: 'FollowerResult'
     seeProfile: 'User'
   }
   User: { // field return type name
@@ -122,8 +157,12 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'String'
     email: 'String'
     firstName: 'String'
+    followers: 'User'
+    following: 'User'
     id: 'String'
     password: 'String'
+    totalFollower: 'Int'
+    totalFollowing: 'Int'
     updatedAt: 'String'
     username: 'String'
   }
@@ -138,20 +177,32 @@ export interface NexusGenArgTypes {
       username: string; // String!
     }
     editProfile: { // args
+      avatar?: NexusGenScalars['Upload'] | null; // Upload
       bio?: string | null; // String
       email?: string | null; // String
       firstName?: string | null; // String
       password?: string | null; // String
     }
+    followUser: { // args
+      username?: string | null; // String
+    }
     signin: { // args
       password: string; // String!
       username: string; // String!
     }
-    updateProfileAvatar: { // args
-      avatar?: NexusGenScalars['Upload'] | null; // Upload
+    unfollowUser: { // args
+      username?: string | null; // String
     }
   }
   Query: {
+    seeFollower: { // args
+      page: number; // Int!
+      username: string; // String!
+    }
+    seeFollowing: { // args
+      cursor?: number | null; // Int
+      username: string; // String!
+    }
     seeProfile: { // args
       username: string; // String!
     }

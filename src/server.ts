@@ -21,7 +21,6 @@ const startServer = async () => {
   const app: Application = express();
 
   app.use(graphqlUploadExpress());
-  app.use(morgan("tiny"));
   app.use("/static", express.static("uploads"));
 
   server.applyMiddleware({ app });

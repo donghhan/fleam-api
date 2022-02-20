@@ -8,6 +8,8 @@ import {
   scalarType,
   arg,
   asNexusMethod,
+  list,
+  intArg,
 } from "nexus";
 import bcrypt from "bcrypt";
 import client from "../client";
@@ -15,6 +17,8 @@ import jwt from "jsonwebtoken";
 import { GraphQLUpload } from "graphql-upload";
 // Secret Key
 import { FLEAM_SECRET_KEY } from "../utils/keys";
+import { protectorResolver } from "../utils/user.utils";
+import { query } from "express";
 
 // User Type
 export const User = objectType({
@@ -29,6 +33,12 @@ export const User = objectType({
     t.string("bio");
     t.string("avatar");
     t.nonNull.string("updatedAt");
+    t.list.field("following", { type: User });
+    t.list.field("followers", { type: User });
+    // t.nonNull.boolean("isFollowing");
+    // t.nonNull.boolean("isMe");
+    t.nonNull.int("totalFollowing");
+    t.nonNull.int("totalFollower");
   },
 });
 
@@ -94,13 +104,15 @@ export const SigninMutation = mutationField("signin", {
 
 // seeProfile Query
 export const UserQuery = queryField("seeProfile", {
-  type: "User",
+  type: list("User"),
   args: {
     username: nonNull(stringArg()),
   },
-  resolve(_, args, ctx) {
-    const { username } = args;
-    return client.user.findUnique({ where: { username } });
+  resolve(_, { username }, ctx) {
+    return client.user.findUnique({
+      where: { username },
+      include: { following: true, followers: true },
+    });
   },
 });
 
@@ -113,9 +125,7 @@ export const CreateAccountMutation = mutationField("createAccount", {
     email: nonNull(stringArg()),
     password: nonNull(stringArg()),
   },
-  async resolve(_, args, ctx) {
-    const { firstName, username, email, password } = args;
-
+  async resolve(_, { firstName, username, email, password }, ctx) {
     // Check if username or email already exists
     const alreadyExistingUser = await client.user.findFirst({
       where: {
@@ -163,15 +173,28 @@ export const EditProfileMutation = mutationField("editProfile", {
     email: stringArg(),
     password: stringArg(),
     bio: stringArg(),
+    avatar: arg({ type: "Upload" }),
   },
   async resolve(
     _,
-    { firstName, email, password: newPassword, bio },
+    { firstName, email, password: newPassword, bio, avatar },
     { signedInUser, protectorResolver }
   ) {
     protectorResolver(signedInUser);
 
+    let avatarUrl = null;
     let hashedPassword = null;
+
+    if (avatar) {
+      const { filename, createReadStream } = await avatar;
+      const newFilename = `${signedInUser.id}-${filename}`;
+      const readStream = createReadStream();
+      const writeStream = createWriteStream(
+        process.cwd() + "/uploads/" + filename
+      );
+      readStream.pipe(writeStream);
+      avatarUrl = `http://localhost:8090/graphql/static/${newFilename}`;
+    }
 
     if (newPassword) {
       hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -184,6 +207,7 @@ export const EditProfileMutation = mutationField("editProfile", {
         email,
         bio,
         ...(hashedPassword && { password: hashedPassword }),
+        ...(avatarUrl && { avatar: avatarUrl }),
       },
     });
 
@@ -197,46 +221,163 @@ export const EditProfileMutation = mutationField("editProfile", {
   },
 });
 
-// Upload Profile Mutation
-export const UpdateProfileAvatarMutation = mutationField(
-  "updateProfileAvatar",
-  {
-    type: "OkResult",
-    args: {
-      avatar: arg({ type: "Upload" }),
-    },
-    async resolve(_, { avatar }, { signedInUser, protectorResolver }) {
-      protectorResolver(signedInUser);
+// Follow User Mutation
+export const FollowUserMutation = mutationField("followUser", {
+  type: "OkResult",
+  args: {
+    username: stringArg(),
+  },
+  async resolve(_, { username }, { signedInUser }) {
+    protectorResolver(signedInUser);
 
-      let avatarUrl = null;
+    // Check if that User exists with that username
+    const alreadyExistingUser = await client.user.findUnique({
+      where: { username },
+    });
 
-      if (avatar) {
-        const { filename, createReadStream } = await avatar;
-        const newFilename = `${signedInUser.id}-${filename}`;
-        const readStream = createReadStream();
-        const writeStream = createWriteStream(
-          process.cwd() + "/uploads/" + filename
-        );
-        readStream.pipe(writeStream);
-        avatarUrl = `http://localhost:8090/graphql/static/${newFilename}`;
-      }
+    if (!alreadyExistingUser) {
+      return {
+        ok: false,
+        error: "That user does not exist.",
+      };
+    }
 
-      const updateAvatar = await client.user.update({
-        where: {
-          id: signedInUser.id,
+    await client.user.update({
+      where: {
+        id: signedInUser.id,
+      },
+      data: {
+        following: {
+          connect: {
+            username,
+          },
         },
-        data: {
-          ...(avatarUrl && { avatar: avatarUrl }),
+      },
+    });
+
+    return {
+      ok: true,
+    };
+  },
+});
+
+// Unfollow User Mutation
+export const UnfollowUserMutation = mutationField("unfollowUser", {
+  type: "OkResult",
+  args: {
+    username: stringArg(),
+  },
+  async resolve(_, { username }, { signedInUser }) {
+    protectorResolver(signedInUser);
+
+    // Check if that User exists with that username
+    const alreadyExistingUser = await client.user.findUnique({
+      where: { username },
+    });
+
+    if (!alreadyExistingUser) {
+      return {
+        ok: false,
+        error: "That user does not exist.",
+      };
+    }
+
+    await client.user.update({
+      where: { id: signedInUser.id },
+      data: {
+        following: {
+          disconnect: {
+            username,
+          },
         },
+      },
+    });
+
+    return {
+      ok: true,
+    };
+  },
+});
+
+export const FollowerResult = objectType({
+  name: "FollowerResult",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
+    t.list.field("followers", { type: User });
+    t.list.field("following", { type: User });
+    t.int("totalPages");
+  },
+});
+
+export const SeeFollowerQuery = queryField("seeFollower", {
+  type: "FollowerResult",
+  args: {
+    username: nonNull(stringArg()),
+    page: nonNull(intArg()),
+  },
+  async resolve(_, { username, page }, {}) {
+    const ok = await client.user.findUnique({
+      where: { username },
+      select: { id: true },
+    });
+
+    if (!ok) {
+      return {
+        ok: false,
+        error: "User not found.",
+      };
+    }
+
+    const followers = await client.user
+      .findUnique({ where: { username } })
+      .followers({
+        take: 5,
+        skip: (page - 1) * 5,
       });
 
-      if (updateAvatar.id) {
-        return {
-          ok: true,
-        };
-      } else {
-        return { ok: false, error: "Could not update profile avatar." };
-      }
-    },
-  }
-);
+    const totalFollowers = await client.user.count({
+      where: { following: { some: { username } } },
+    });
+
+    return {
+      ok: true,
+      followers,
+      totalPages: Math.ceil(totalFollowers / 5),
+    };
+  },
+});
+
+export const SeeFollowingQuery = queryField("seeFollowing", {
+  type: "FollowerResult",
+  args: {
+    username: nonNull(stringArg()),
+    cursor: intArg(),
+  },
+  async resolve(_, { username, cursor }) {
+    const ok = await client.user.findUnique({
+      where: { username },
+      select: { id: true },
+    });
+
+    if (!ok) {
+      return {
+        ok: false,
+        error: "User not found",
+      };
+    }
+
+    const following = await client.user
+      .findUnique({ where: { username } })
+      .following({
+        take: 5,
+        skip: cursor ? 1 : 0,
+        ...(cursor && { cursor: { id: cursor } }),
+      });
+
+    return {
+      ok: true,
+      following,
+    };
+  },
+});
