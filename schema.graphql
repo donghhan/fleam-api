@@ -2,20 +2,17 @@
 ### Do not make changes to this file directly
 
 
-type FollowerResult {
+type FollowUserResult {
   error: String
-  followers: [User]
-  following: [User]
   ok: Boolean!
-  totalPages: Int
 }
 
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
   editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): OkResult
-  followUser(username: String): OkResult
+  followUser(username: String!): FollowUserResult
   signin(password: String!, username: String!): OkResult
-  unfollowUser(username: String): OkResult
+  unfollowUser(username: String!): FollowUserResult
 }
 
 type OkResult {
@@ -25,9 +22,22 @@ type OkResult {
 }
 
 type Query {
-  seeFollower(page: Int!, username: String!): FollowerResult
-  seeFollowing(cursor: Int, username: String!): FollowerResult
+  seeFollowers(page: Int!, username: String!): SeeFollowerResult
+  seeFollowings(cursor: Int, username: String!): SeeFollowingResult
   seeProfile(username: String!): [User]
+}
+
+type SeeFollowerResult {
+  error: String
+  followers: [User]
+  ok: Boolean!
+  totalPages: Int
+}
+
+type SeeFollowingResult {
+  error: String
+  following: [User]
+  ok: Boolean!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -42,6 +52,8 @@ type User {
   followers: [User]
   following: [User]
   id: String!
+  isFollowing: Boolean!
+  isMyself: Boolean!
   password: String!
   totalFollower: Int!
   totalFollowing: Int!

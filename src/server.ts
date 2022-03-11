@@ -1,6 +1,5 @@
 import express from "express";
-import morgan from "morgan";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, gql } from "apollo-server-express";
 import { GraphQLUpload, graphqlUploadExpress } from "graphql-upload";
 import { schema } from "./schema";
 import { getUser, protectorResolver } from "./utils/user.utils";
@@ -21,7 +20,7 @@ const startServer = async () => {
   const app: Application = express();
 
   app.use(graphqlUploadExpress());
-  app.use("/static", express.static("uploads"));
+  app.use("static", express.static("uploads"));
 
   server.applyMiddleware({ app });
 

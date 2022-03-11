@@ -1,4 +1,4 @@
-import { objectType, asNexusMethod } from "nexus";
+import { asNexusMethod, objectType } from "nexus";
 import { GraphQLUpload } from "graphql-upload";
 
 // User Type
@@ -16,8 +16,8 @@ export const User = objectType({
     t.nonNull.string("updatedAt");
     t.list.field("following", { type: User });
     t.list.field("followers", { type: User });
-    // t.nonNull.boolean("isFollowing");
-    // t.nonNull.boolean("isMe");
+    t.nonNull.boolean("isFollowing");
+    t.nonNull.boolean("isMyself");
     t.nonNull.int("totalFollowing");
     t.nonNull.int("totalFollower");
   },
@@ -31,15 +31,39 @@ export const OkResult = objectType({
   },
 });
 
+// scalarType for file uploads
 export const Upload = asNexusMethod(GraphQLUpload, "upload");
 
-export const FollowerResult = objectType({
-  name: "FollowerResult",
+// objectType for fetching following results
+export const FollowUserResult = objectType({
+  name: "FollowUserResult",
   definition(t) {
     t.nonNull.boolean("ok");
     t.string("error");
-    t.list.field("followers", { type: User });
-    t.list.field("following", { type: User });
+  },
+});
+
+// objectType for followers pagination
+export const SeeFollowerResult = objectType({
+  name: "SeeFollowerResult",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
     t.int("totalPages");
+    t.list.field("followers", {
+      type: User,
+    });
+  },
+});
+
+// objectType for following pagination
+export const SeeFollowingResult = objectType({
+  name: "SeeFollowingResult",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
+    t.list.field("following", {
+      type: User,
+    });
   },
 });

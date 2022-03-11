@@ -43,12 +43,9 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  FollowerResult: { // root type
+  FollowUserResult: { // root type
     error?: string | null; // String
-    followers?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     ok: boolean; // Boolean!
-    totalPages?: number | null; // Int
   }
   Mutation: {};
   OkResult: { // root type
@@ -57,6 +54,17 @@ export interface NexusGenObjects {
     token?: string | null; // String
   }
   Query: {};
+  SeeFollowerResult: { // root type
+    error?: string | null; // String
+    followers?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    ok: boolean; // Boolean!
+    totalPages?: number | null; // Int
+  }
+  SeeFollowingResult: { // root type
+    error?: string | null; // String
+    following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    ok: boolean; // Boolean!
+  }
   User: { // root type
     avatar?: string | null; // String
     bio?: string | null; // String
@@ -66,6 +74,8 @@ export interface NexusGenObjects {
     followers?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     id: string; // String!
+    isFollowing: boolean; // Boolean!
+    isMyself: boolean; // Boolean!
     password: string; // String!
     totalFollower: number; // Int!
     totalFollowing: number; // Int!
@@ -85,19 +95,16 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  FollowerResult: { // field return type
+  FollowUserResult: { // field return type
     error: string | null; // String
-    followers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    following: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     ok: boolean; // Boolean!
-    totalPages: number | null; // Int
   }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
-    followUser: NexusGenRootTypes['OkResult'] | null; // OkResult
+    followUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
     signin: NexusGenRootTypes['OkResult'] | null; // OkResult
-    unfollowUser: NexusGenRootTypes['OkResult'] | null; // OkResult
+    unfollowUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
   }
   OkResult: { // field return type
     error: string | null; // String
@@ -105,9 +112,20 @@ export interface NexusGenFieldTypes {
     token: string | null; // String
   }
   Query: { // field return type
-    seeFollower: NexusGenRootTypes['FollowerResult'] | null; // FollowerResult
-    seeFollowing: NexusGenRootTypes['FollowerResult'] | null; // FollowerResult
+    seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
+    seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
     seeProfile: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+  }
+  SeeFollowerResult: { // field return type
+    error: string | null; // String
+    followers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    ok: boolean; // Boolean!
+    totalPages: number | null; // Int
+  }
+  SeeFollowingResult: { // field return type
+    error: string | null; // String
+    following: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    ok: boolean; // Boolean!
   }
   User: { // field return type
     avatar: string | null; // String
@@ -118,6 +136,8 @@ export interface NexusGenFieldTypes {
     followers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     following: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     id: string; // String!
+    isFollowing: boolean; // Boolean!
+    isMyself: boolean; // Boolean!
     password: string; // String!
     totalFollower: number; // Int!
     totalFollowing: number; // Int!
@@ -127,19 +147,16 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
-  FollowerResult: { // field return type name
+  FollowUserResult: { // field return type name
     error: 'String'
-    followers: 'User'
-    following: 'User'
     ok: 'Boolean'
-    totalPages: 'Int'
   }
   Mutation: { // field return type name
     createAccount: 'User'
     editProfile: 'OkResult'
-    followUser: 'OkResult'
+    followUser: 'FollowUserResult'
     signin: 'OkResult'
-    unfollowUser: 'OkResult'
+    unfollowUser: 'FollowUserResult'
   }
   OkResult: { // field return type name
     error: 'String'
@@ -147,9 +164,20 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
   }
   Query: { // field return type name
-    seeFollower: 'FollowerResult'
-    seeFollowing: 'FollowerResult'
+    seeFollowers: 'SeeFollowerResult'
+    seeFollowings: 'SeeFollowingResult'
     seeProfile: 'User'
+  }
+  SeeFollowerResult: { // field return type name
+    error: 'String'
+    followers: 'User'
+    ok: 'Boolean'
+    totalPages: 'Int'
+  }
+  SeeFollowingResult: { // field return type name
+    error: 'String'
+    following: 'User'
+    ok: 'Boolean'
   }
   User: { // field return type name
     avatar: 'String'
@@ -160,6 +188,8 @@ export interface NexusGenFieldTypeNames {
     followers: 'User'
     following: 'User'
     id: 'String'
+    isFollowing: 'Boolean'
+    isMyself: 'Boolean'
     password: 'String'
     totalFollower: 'Int'
     totalFollowing: 'Int'
@@ -184,22 +214,22 @@ export interface NexusGenArgTypes {
       password?: string | null; // String
     }
     followUser: { // args
-      username?: string | null; // String
+      username: string; // String!
     }
     signin: { // args
       password: string; // String!
       username: string; // String!
     }
     unfollowUser: { // args
-      username?: string | null; // String
+      username: string; // String!
     }
   }
   Query: {
-    seeFollower: { // args
+    seeFollowers: { // args
       page: number; // Int!
       username: string; // String!
     }
-    seeFollowing: { // args
+    seeFollowings: { // args
       cursor?: number | null; // Int
       username: string; // String!
     }

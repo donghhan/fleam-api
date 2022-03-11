@@ -1,13 +1,12 @@
-import { stringArg, mutationField } from "nexus";
+import { stringArg, mutationField, nonNull } from "nexus";
 import client from "../../../client";
-import { FLEAM_SECRET_KEY } from "../../../utils/keys";
 import { protectorResolver } from "../../../utils/user.utils";
 
 // Follow User Mutation
 export const FollowUserMutation = mutationField("followUser", {
-  type: "OkResult",
+  type: "FollowUserResult",
   args: {
-    username: stringArg(),
+    username: nonNull(stringArg()),
   },
   async resolve(_, { username }, { signedInUser }) {
     protectorResolver(signedInUser);
@@ -45,9 +44,9 @@ export const FollowUserMutation = mutationField("followUser", {
 
 // Unfollow User Mutation
 export const UnfollowUserMutation = mutationField("unfollowUser", {
-  type: "OkResult",
+  type: "FollowUserResult",
   args: {
-    username: stringArg(),
+    username: nonNull(stringArg()),
   },
   async resolve(_, { username }, { signedInUser }) {
     protectorResolver(signedInUser);

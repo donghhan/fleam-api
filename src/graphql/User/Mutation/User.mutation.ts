@@ -133,7 +133,7 @@ export const EditProfileMutation = mutationField("editProfile", {
         process.cwd() + "/uploads/" + filename
       );
       readStream.pipe(writeStream);
-      avatarUrl = `http://localhost:8090/graphql/static/${newFilename}`;
+      avatarUrl = `http://localhost:4500/graphql/static/${newFilename}`;
     }
 
     if (newPassword) {

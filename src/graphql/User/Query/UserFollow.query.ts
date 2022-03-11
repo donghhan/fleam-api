@@ -3,8 +3,8 @@ import { nonNull, stringArg, queryField, list, intArg } from "nexus";
 import client from "../../../client";
 import { FLEAM_SECRET_KEY } from "../../../utils/keys";
 
-export const SeeFollowerQuery = queryField("seeFollower", {
-  type: "FollowerResult",
+export const SeeFollowerQuery = queryField("seeFollowers", {
+  type: "SeeFollowerResult",
   args: {
     username: nonNull(stringArg()),
     page: nonNull(intArg()),
@@ -41,8 +41,8 @@ export const SeeFollowerQuery = queryField("seeFollower", {
   },
 });
 
-export const SeeFollowingQuery = queryField("seeFollowing", {
-  type: "FollowerResult",
+export const SeeFollowingQuery = queryField("seeFollowings", {
+  type: "SeeFollowingResult",
   args: {
     username: nonNull(stringArg()),
     cursor: intArg(),
@@ -66,6 +66,9 @@ export const SeeFollowingQuery = queryField("seeFollowing", {
         take: 5,
         skip: cursor ? 1 : 0,
         ...(cursor && { cursor: { id: cursor } }),
+        orderBy: {
+          id: "asc",
+        },
       });
 
     return {
