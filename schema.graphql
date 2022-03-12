@@ -7,6 +7,15 @@ type FollowUserResult {
   ok: Boolean!
 }
 
+"""Hashtag object type"""
+type Hashtag {
+  createdAt: String!
+  hashtag: String!
+  id: String!
+  photos: [Photo]
+  updatedAt: String!
+}
+
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
   editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): OkResult
@@ -14,6 +23,9 @@ type Mutation {
   searchUsers(keyword: String!): [User]
   signin(password: String!, username: String!): OkResult
   unfollowUser(username: String!): FollowUserResult
+
+  """Upload Photo Mutation"""
+  uploadPhoto(caption: String, file: String): Photo
 }
 
 """Object type for showing success/failure of signin & signup"""
@@ -21,6 +33,17 @@ type OkResult {
   error: String
   ok: Boolean!
   token: String
+}
+
+"""Photo object type"""
+type Photo {
+  caption: String
+  createdAt: String!
+  file: String!
+  hashtag: [Hashtag]
+  id: String!
+  updatedAt: String!
+  user: User!
 }
 
 type Query {

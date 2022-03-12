@@ -1,4 +1,4 @@
-import { asNexusMethod, intArg, objectType } from "nexus";
+import { asNexusMethod, objectType } from "nexus";
 import { GraphQLUpload } from "graphql-upload";
 import client from "../../client";
 

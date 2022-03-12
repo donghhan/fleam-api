@@ -47,11 +47,27 @@ export interface NexusGenObjects {
     error?: string | null; // String
     ok: boolean; // Boolean!
   }
+  Hashtag: { // root type
+    createdAt: string; // String!
+    hashtag: string; // String!
+    id: string; // String!
+    photos?: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
+    updatedAt: string; // String!
+  }
   Mutation: {};
   OkResult: { // root type
     error?: string | null; // String
     ok: boolean; // Boolean!
     token?: string | null; // String
+  }
+  Photo: { // root type
+    caption?: string | null; // String
+    createdAt: string; // String!
+    file: string; // String!
+    hashtag?: Array<NexusGenRootTypes['Hashtag'] | null> | null; // [Hashtag]
+    id: string; // String!
+    updatedAt: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
   Query: {};
   SeeFollowerResult: { // root type
@@ -95,6 +111,13 @@ export interface NexusGenFieldTypes {
     error: string | null; // String
     ok: boolean; // Boolean!
   }
+  Hashtag: { // field return type
+    createdAt: string; // String!
+    hashtag: string; // String!
+    id: string; // String!
+    photos: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
+    updatedAt: string; // String!
+  }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
@@ -102,11 +125,21 @@ export interface NexusGenFieldTypes {
     searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     signin: NexusGenRootTypes['OkResult'] | null; // OkResult
     unfollowUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
+    uploadPhoto: NexusGenRootTypes['Photo'] | null; // Photo
   }
   OkResult: { // field return type
     error: string | null; // String
     ok: boolean; // Boolean!
     token: string | null; // String
+  }
+  Photo: { // field return type
+    caption: string | null; // String
+    createdAt: string; // String!
+    file: string; // String!
+    hashtag: Array<NexusGenRootTypes['Hashtag'] | null> | null; // [Hashtag]
+    id: string; // String!
+    updatedAt: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
@@ -150,6 +183,13 @@ export interface NexusGenFieldTypeNames {
     error: 'String'
     ok: 'Boolean'
   }
+  Hashtag: { // field return type name
+    createdAt: 'String'
+    hashtag: 'String'
+    id: 'String'
+    photos: 'Photo'
+    updatedAt: 'String'
+  }
   Mutation: { // field return type name
     createAccount: 'User'
     editProfile: 'OkResult'
@@ -157,11 +197,21 @@ export interface NexusGenFieldTypeNames {
     searchUsers: 'User'
     signin: 'OkResult'
     unfollowUser: 'FollowUserResult'
+    uploadPhoto: 'Photo'
   }
   OkResult: { // field return type name
     error: 'String'
     ok: 'Boolean'
     token: 'String'
+  }
+  Photo: { // field return type name
+    caption: 'String'
+    createdAt: 'String'
+    file: 'String'
+    hashtag: 'Hashtag'
+    id: 'String'
+    updatedAt: 'String'
+    user: 'User'
   }
   Query: { // field return type name
     seeFollowers: 'SeeFollowerResult'
@@ -227,6 +277,10 @@ export interface NexusGenArgTypes {
     }
     unfollowUser: { // args
       username: string; // String!
+    }
+    uploadPhoto: { // args
+      caption?: string | null; // String
+      file?: string | null; // String
     }
   }
   Query: {

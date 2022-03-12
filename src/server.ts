@@ -1,6 +1,6 @@
 import express from "express";
-import { ApolloServer, gql } from "apollo-server-express";
-import { GraphQLUpload, graphqlUploadExpress } from "graphql-upload";
+import { ApolloServer } from "apollo-server-express";
+import { graphqlUploadExpress } from "graphql-upload";
 import { schema } from "./schema";
 import { getUser, protectorResolver } from "./utils/user.utils";
 import { Application } from "express";
