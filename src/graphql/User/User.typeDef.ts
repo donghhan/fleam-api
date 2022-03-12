@@ -1,9 +1,11 @@
-import { asNexusMethod, objectType } from "nexus";
+import { asNexusMethod, intArg, objectType } from "nexus";
 import { GraphQLUpload } from "graphql-upload";
+import client from "../../client";
 
 // User Type
 export const User = objectType({
   name: "User",
+  description: "User object type",
   definition(t) {
     t.nonNull.string("id");
     t.string("firstName");
@@ -16,16 +18,50 @@ export const User = objectType({
     t.nonNull.string("updatedAt");
     t.list.field("following", { type: User });
     t.list.field("followers", { type: User });
-    t.nonNull.boolean("isFollowing");
-    t.nonNull.boolean("isMyself");
-    t.nonNull.int("totalFollowing");
-    t.nonNull.int("totalFollower");
+    t.nonNull.boolean("isFollowing", {
+      async resolve({ id }, _, { signedInUser }) {
+        if (!signedInUser) {
+          return false;
+        }
+
+        const exists = await client.user.count({
+          where: {
+            username: signedInUser.username,
+            following: { some: { id } },
+          },
+        });
+
+        return Boolean(exists);
+      },
+    });
+    // Computed field showing whether signedin account is user itself
+    t.nonNull.boolean("isMyself", {
+      resolve({ id }, _, { signedInUser }) {
+        if (!signedInUser) {
+          return false;
+        }
+        return id === signedInUser.id;
+      },
+    });
+    // Computed field for fetching total number of followings
+    t.nonNull.int("totalFollowing", {
+      resolve({ id }) {
+        return client.user.count({ where: { followers: { some: { id } } } });
+      },
+    });
+    // Computed field for fetching total number of followers
+    t.nonNull.int("totalFollower", {
+      resolve({ id }) {
+        return client.user.count({ where: { following: { some: { id } } } });
+      },
+    });
   },
 });
 
 // OkResult
 export const OkResult = objectType({
   name: "OkResult",
+  description: "Object type for showing success/failure of signin & signup",
   definition(t) {
     t.nonNull.boolean("ok"), t.string("error"), t.string("token");
   },
@@ -53,6 +89,21 @@ export const SeeFollowerResult = objectType({
     t.list.field("followers", {
       type: User,
     });
+    t.int("totalFollower", {
+      // Computed field of totalFollowing
+      description: "Number of total followers",
+      resolve: ({ id }, _, ctx) => {
+        client.user.count({
+          where: {
+            following: {
+              some: {
+                id,
+              },
+            },
+          },
+        });
+      },
+    });
   },
 });
 
@@ -64,6 +115,16 @@ export const SeeFollowingResult = objectType({
     t.string("error");
     t.list.field("following", {
       type: User,
+    });
+    t.int("totalFollowing", {
+      // Computed field of totalFollowing
+      description: "Number of total following",
+      resolve: async ({ id }, {}, { client }) => {
+        const totalFollowings = await client.followings({
+          where: { followers: { id } },
+        });
+        return totalFollowings.length;
+      },
     });
   },
 });

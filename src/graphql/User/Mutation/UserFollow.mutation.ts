@@ -1,4 +1,4 @@
-import { stringArg, mutationField, nonNull } from "nexus";
+import { stringArg, mutationField, nonNull, list } from "nexus";
 import client from "../../../client";
 import { protectorResolver } from "../../../utils/user.utils";
 
@@ -77,5 +77,23 @@ export const UnfollowUserMutation = mutationField("unfollowUser", {
     return {
       ok: true,
     };
+  },
+});
+
+// Searching User Mutation
+export const SearchUserMutation = mutationField("searchUsers", {
+  type: list("User"),
+  args: {
+    keyword: nonNull(stringArg()),
+  },
+  async resolve(_, { keyword }) {
+    const users = await client.user.findMany({
+      take: 4,
+      skip: 1,
+      where: { username: { contains: keyword } },
+      orderBy: { username: "asc" },
+    });
+
+    return users;
   },
 });

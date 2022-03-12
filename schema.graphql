@@ -11,10 +11,12 @@ type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
   editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): OkResult
   followUser(username: String!): FollowUserResult
+  searchUsers(keyword: String!): [User]
   signin(password: String!, username: String!): OkResult
   unfollowUser(username: String!): FollowUserResult
 }
 
+"""Object type for showing success/failure of signin & signup"""
 type OkResult {
   error: String
   ok: Boolean!
@@ -24,13 +26,18 @@ type OkResult {
 type Query {
   seeFollowers(page: Int!, username: String!): SeeFollowerResult
   seeFollowings(cursor: Int, username: String!): SeeFollowingResult
-  seeProfile(username: String!): [User]
+
+  """Query field for viewing the user profile"""
+  seeProfile(username: String!): User
 }
 
 type SeeFollowerResult {
   error: String
   followers: [User]
   ok: Boolean!
+
+  """Number of total followers"""
+  totalFollower: Int
   totalPages: Int
 }
 
@@ -38,11 +45,15 @@ type SeeFollowingResult {
   error: String
   following: [User]
   ok: Boolean!
+
+  """Number of total following"""
+  totalFollowing: Int
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
+"""User object type"""
 type User {
   avatar: String
   bio: String

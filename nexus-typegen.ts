@@ -74,11 +74,7 @@ export interface NexusGenObjects {
     followers?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     id: string; // String!
-    isFollowing: boolean; // Boolean!
-    isMyself: boolean; // Boolean!
     password: string; // String!
-    totalFollower: number; // Int!
-    totalFollowing: number; // Int!
     updatedAt: string; // String!
     username: string; // String!
   }
@@ -103,6 +99,7 @@ export interface NexusGenFieldTypes {
     createAccount: NexusGenRootTypes['User'] | null; // User
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
     followUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
+    searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     signin: NexusGenRootTypes['OkResult'] | null; // OkResult
     unfollowUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
   }
@@ -114,18 +111,20 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
     seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
-    seeProfile: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    seeProfile: NexusGenRootTypes['User'] | null; // User
   }
   SeeFollowerResult: { // field return type
     error: string | null; // String
     followers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     ok: boolean; // Boolean!
+    totalFollower: number | null; // Int
     totalPages: number | null; // Int
   }
   SeeFollowingResult: { // field return type
     error: string | null; // String
     following: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     ok: boolean; // Boolean!
+    totalFollowing: number | null; // Int
   }
   User: { // field return type
     avatar: string | null; // String
@@ -155,6 +154,7 @@ export interface NexusGenFieldTypeNames {
     createAccount: 'User'
     editProfile: 'OkResult'
     followUser: 'FollowUserResult'
+    searchUsers: 'User'
     signin: 'OkResult'
     unfollowUser: 'FollowUserResult'
   }
@@ -172,12 +172,14 @@ export interface NexusGenFieldTypeNames {
     error: 'String'
     followers: 'User'
     ok: 'Boolean'
+    totalFollower: 'Int'
     totalPages: 'Int'
   }
   SeeFollowingResult: { // field return type name
     error: 'String'
     following: 'User'
     ok: 'Boolean'
+    totalFollowing: 'Int'
   }
   User: { // field return type name
     avatar: 'String'
@@ -215,6 +217,9 @@ export interface NexusGenArgTypes {
     }
     followUser: { // args
       username: string; // String!
+    }
+    searchUsers: { // args
+      keyword: string; // String!
     }
     signin: { // args
       password: string; // String!
