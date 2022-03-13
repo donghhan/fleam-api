@@ -51,7 +51,6 @@ export interface NexusGenObjects {
     createdAt: string; // String!
     hashtag: string; // String!
     id: string; // String!
-    photos?: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
     updatedAt: string; // String!
   }
   Mutation: {};
@@ -258,6 +257,11 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Hashtag: {
+    photos: { // args
+      page: number; // Int!
+    }
+  }
   Mutation: {
     createAccount: { // args
       email: string; // String!

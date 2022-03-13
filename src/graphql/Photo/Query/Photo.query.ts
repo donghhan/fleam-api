@@ -1,4 +1,4 @@
-import { queryField, nonNull, intArg, stringArg } from "nexus";
+import { queryField, nonNull, stringArg, intArg } from "nexus";
 import client from "../../../client";
 
 // See Photo Query
@@ -21,6 +21,6 @@ export const SeeHashtagQuery = queryField("seeHashtag", {
     hashtag: nonNull(stringArg()),
   },
   resolve(_, { hashtag }) {
-    client.hashtag.findUnique({ where: { hashtag } });
+    return client.hashtag.findUnique({ where: { hashtag } });
   },
 });

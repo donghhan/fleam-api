@@ -1,4 +1,4 @@
-import { asNexusMethod, objectType } from "nexus";
+import { asNexusMethod, objectType, nonNull, intArg } from "nexus";
 import { GraphQLUpload } from "graphql-upload";
 import client from "../client";
 
@@ -167,7 +167,14 @@ export const Hashtag = objectType({
     t.nonNull.string("hashtag");
     t.nonNull.string("createdAt");
     t.nonNull.string("updatedAt");
-    t.list.field("photos", { type: Photo });
+    t.list.field("photos", {
+      type: Photo,
+      args: { page: nonNull(intArg()) },
+      resolve({ id }, args) {
+        console.log(args);
+        return client.hashtag.findUnique({ where: { id } }).photos();
+      },
+    });
     // Computed field for calculating total photos with the hashtag
     t.int("totalPhotos", {
       resolve({ id }) {

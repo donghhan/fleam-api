@@ -12,7 +12,7 @@ type Hashtag {
   createdAt: String!
   hashtag: String!
   id: String!
-  photos: [Photo]
+  photos(page: Int!): [Photo]
   totalPhotos: Int
   updatedAt: String!
 }
