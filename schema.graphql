@@ -78,6 +78,9 @@ type Photo {
 type Query {
   """Search Photo Query"""
   searchPhoto(keyword: String!): Photo
+
+  """See Feed Query"""
+  seeFeed: [Photo]
   seeFollowers(page: Int!, username: String!): SeeFollowerResult
   seeFollowings(cursor: Int, username: String!): SeeFollowingResult
 

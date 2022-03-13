@@ -172,6 +172,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     searchPhoto: NexusGenRootTypes['Photo'] | null; // Photo
+    seeFeed: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
     seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
     seeHashtag: NexusGenRootTypes['Hashtag'] | null; // Hashtag
@@ -267,6 +268,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     searchPhoto: 'Photo'
+    seeFeed: 'Photo'
     seeFollowers: 'SeeFollowerResult'
     seeFollowings: 'SeeFollowingResult'
     seeHashtag: 'Hashtag'

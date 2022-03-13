@@ -11,6 +11,9 @@ export * from "./User/Query/UserFollow.query";
 export * from "./Photo/Mutation/Photo.mutation";
 export * from "./Photo/Query/Photo.query";
 
-// Like Part
+// Photo - Feed Part
+export * from "./Photo/Query/Feed.query";
+
+// Photo - Like Part
 export * from "./Photo/Mutation/Like.mutation";
 export * from "./Photo/Query/Like.query";
