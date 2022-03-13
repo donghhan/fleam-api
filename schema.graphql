@@ -22,6 +22,20 @@ type Hashtag {
   updatedAt: String!
 }
 
+"""Like object type"""
+type Like {
+  createdAt: String!
+  id: String!
+  photo: Photo!
+  updatedAt: String!
+}
+
+"""LikePhotoResult object type"""
+type LikePhotoResult {
+  error: String
+  ok: Boolean!
+}
+
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
 
@@ -31,6 +45,9 @@ type Mutation {
   followUser(username: String!): FollowUserResult
   searchUsers(keyword: String!): [User]
   signin(password: String!, username: String!): OkResult
+
+  """Like Photo Mutation"""
+  toggleLike(id: String!): LikePhotoResult
   unfollowUser(username: String!): FollowUserResult
 
   """Upload Photo Mutation"""
@@ -51,6 +68,9 @@ type Photo {
   file: String!
   hashtags: [Hashtag]
   id: String!
+
+  """Number of likes of the photo"""
+  likes: Int!
   updatedAt: String!
   user: User!
 }

@@ -10,3 +10,6 @@ export * from "./User/Query/UserFollow.query";
 // Photo Part
 export * from "./Photo/Mutation/Photo.mutation";
 export * from "./Photo/Query/Photo.query";
+
+// Like Part
+export * from "./Photo/Mutation/Like.mutation";

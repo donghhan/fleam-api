@@ -162,6 +162,11 @@ export const Photo = objectType({
         return client.hashtag.findMany({ where: { photos: { some: { id } } } });
       },
     });
+    // Likes resolver in Photo
+    t.nonNull.int("likes", {
+      description: "Number of likes of the photo",
+      resolve: ({ id }) => client.like.count({ where: { photoId: id } }),
+    });
   },
 });
 
@@ -194,6 +199,28 @@ export const Hashtag = objectType({
 // EditPhotoResult Type
 export const EditPhotoResult = objectType({
   name: "EditPhotoResult",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
+  },
+});
+
+// Like Type
+export const Like = objectType({
+  name: "Like",
+  description: "Like object type",
+  definition(t) {
+    t.nonNull.string("id");
+    t.nonNull.string("createdAt");
+    t.nonNull.string("updatedAt");
+    t.nonNull.field("photo", { type: Photo });
+  },
+});
+
+// LikePhotoResult Type
+export const LikePhotoResult = objectType({
+  name: "LikePhotoResult",
+  description: "LikePhotoResult object type",
   definition(t) {
     t.nonNull.boolean("ok");
     t.string("error");

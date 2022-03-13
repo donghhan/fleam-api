@@ -57,6 +57,16 @@ export interface NexusGenObjects {
     id: string; // String!
     updatedAt: string; // String!
   }
+  Like: { // root type
+    createdAt: string; // String!
+    id: string; // String!
+    photo: NexusGenRootTypes['Photo']; // Photo!
+    updatedAt: string; // String!
+  }
+  LikePhotoResult: { // root type
+    error?: string | null; // String
+    ok: boolean; // Boolean!
+  }
   Mutation: {};
   OkResult: { // root type
     error?: string | null; // String
@@ -124,6 +134,16 @@ export interface NexusGenFieldTypes {
     totalPhotos: number | null; // Int
     updatedAt: string; // String!
   }
+  Like: { // field return type
+    createdAt: string; // String!
+    id: string; // String!
+    photo: NexusGenRootTypes['Photo']; // Photo!
+    updatedAt: string; // String!
+  }
+  LikePhotoResult: { // field return type
+    error: string | null; // String
+    ok: boolean; // Boolean!
+  }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
     editPhoto: NexusGenRootTypes['EditPhotoResult'] | null; // EditPhotoResult
@@ -131,6 +151,7 @@ export interface NexusGenFieldTypes {
     followUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
     searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     signin: NexusGenRootTypes['OkResult'] | null; // OkResult
+    toggleLike: NexusGenRootTypes['LikePhotoResult'] | null; // LikePhotoResult
     unfollowUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
     uploadPhoto: NexusGenRootTypes['Photo'] | null; // Photo
   }
@@ -145,6 +166,7 @@ export interface NexusGenFieldTypes {
     file: string; // String!
     hashtags: Array<NexusGenRootTypes['Hashtag'] | null> | null; // [Hashtag]
     id: string; // String!
+    likes: number; // Int!
     updatedAt: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
@@ -206,6 +228,16 @@ export interface NexusGenFieldTypeNames {
     totalPhotos: 'Int'
     updatedAt: 'String'
   }
+  Like: { // field return type name
+    createdAt: 'String'
+    id: 'String'
+    photo: 'Photo'
+    updatedAt: 'String'
+  }
+  LikePhotoResult: { // field return type name
+    error: 'String'
+    ok: 'Boolean'
+  }
   Mutation: { // field return type name
     createAccount: 'User'
     editPhoto: 'EditPhotoResult'
@@ -213,6 +245,7 @@ export interface NexusGenFieldTypeNames {
     followUser: 'FollowUserResult'
     searchUsers: 'User'
     signin: 'OkResult'
+    toggleLike: 'LikePhotoResult'
     unfollowUser: 'FollowUserResult'
     uploadPhoto: 'Photo'
   }
@@ -227,6 +260,7 @@ export interface NexusGenFieldTypeNames {
     file: 'String'
     hashtags: 'Hashtag'
     id: 'String'
+    likes: 'Int'
     updatedAt: 'String'
     user: 'User'
   }
@@ -304,6 +338,9 @@ export interface NexusGenArgTypes {
     signin: { // args
       password: string; // String!
       username: string; // String!
+    }
+    toggleLike: { // args
+      id: string; // String!
     }
     unfollowUser: { // args
       username: string; // String!

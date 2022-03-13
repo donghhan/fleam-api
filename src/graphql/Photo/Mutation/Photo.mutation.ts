@@ -67,6 +67,9 @@ export const EditPhotoMutation = mutationField("editPhoto", {
         },
       },
     });
-    console.log(updatedPhoto);
+
+    return {
+      ok: true,
+    };
   },
 });
