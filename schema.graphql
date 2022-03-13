@@ -13,6 +13,7 @@ type Hashtag {
   hashtag: String!
   id: String!
   photos: [Photo]
+  totalPhotos: Int
   updatedAt: String!
 }
 
@@ -25,7 +26,7 @@ type Mutation {
   unfollowUser(username: String!): FollowUserResult
 
   """Upload Photo Mutation"""
-  uploadPhoto(caption: String, file: String): Photo
+  uploadPhoto(caption: String, file: String!): Photo
 }
 
 """Object type for showing success/failure of signin & signup"""
@@ -40,7 +41,7 @@ type Photo {
   caption: String
   createdAt: String!
   file: String!
-  hashtag: [Hashtag]
+  hashtags: [Hashtag]
   id: String!
   updatedAt: String!
   user: User!
@@ -49,6 +50,12 @@ type Photo {
 type Query {
   seeFollowers(page: Int!, username: String!): SeeFollowerResult
   seeFollowings(cursor: Int, username: String!): SeeFollowingResult
+
+  """See Hashtag Query"""
+  seeHashtag(hashtag: String!): Hashtag
+
+  """See Photo Query"""
+  seePhoto(id: String!): Photo
 
   """Query field for viewing the user profile"""
   seeProfile(username: String!): User
@@ -64,6 +71,7 @@ type SeeFollowerResult {
   totalPages: Int
 }
 
+"""SeeFollowingResult object type"""
 type SeeFollowingResult {
   error: String
   following: [User]
@@ -89,6 +97,7 @@ type User {
   isFollowing: Boolean!
   isMyself: Boolean!
   password: String!
+  photos: [Photo]
   totalFollower: Int!
   totalFollowing: Int!
   updatedAt: String!

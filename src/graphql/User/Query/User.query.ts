@@ -1,4 +1,4 @@
-import { nonNull, stringArg, queryField, list } from "nexus";
+import { nonNull, stringArg, queryField } from "nexus";
 import client from "../../../client";
 
 // seeProfile Query

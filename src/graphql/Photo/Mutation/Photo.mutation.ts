@@ -1,4 +1,4 @@
-import { mutationField, nonNull, stringArg, arg } from "nexus";
+import { mutationField, nonNull, stringArg } from "nexus";
 import client from "../../../client";
 
 // Upload photo Mutation
@@ -6,21 +6,20 @@ export const UploadPhotoMutation = mutationField("uploadPhoto", {
   type: "Photo",
   description: "Upload Photo Mutation",
   args: {
-    file: stringArg(),
+    file: nonNull(stringArg()),
     caption: stringArg(),
   },
   async resolve(_, { file, caption }, { signedInUser, protectorResolver }) {
     protectorResolver(signedInUser);
-    let hashtagObjs: Array<string> = [];
+    let hashtagObj = [];
 
     // RegEx for hashtags
     if (caption) {
       const hashtags = caption.match(/#[\u0E00-\u0E7Fa-zA-Z]+/g);
-      const hashtagObjs = hashtags.map((hashtag: string) => ({
+      hashtagObj = hashtags.map((hashtag: string) => ({
         where: { hashtag },
         create: { hashtag },
       }));
-      console.log(hashtagObjs);
     }
 
     return client.photo.create({
@@ -32,8 +31,8 @@ export const UploadPhotoMutation = mutationField("uploadPhoto", {
             id: signedInUser.id,
           },
         },
-        ...(hashtagObjs.length > 0 && {
-          hashtags: { connectOrCreate: hashtagObjs },
+        ...(hashtagObj.length > 0 && {
+          hashtags: { connectOrCreate: hashtagObj },
         }),
       },
     });

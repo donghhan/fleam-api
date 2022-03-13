@@ -1,6 +1,6 @@
 import { asNexusMethod, objectType } from "nexus";
 import { GraphQLUpload } from "graphql-upload";
-import client from "../../client";
+import client from "../client";
 
 // User Type
 export const User = objectType({
@@ -18,6 +18,7 @@ export const User = objectType({
     t.nonNull.string("updatedAt");
     t.list.field("following", { type: User });
     t.list.field("followers", { type: User });
+    t.list.field("photos", { type: Photo });
     t.nonNull.boolean("isFollowing", {
       async resolve({ id }, _, { signedInUser }) {
         if (!signedInUser) {
@@ -110,6 +111,7 @@ export const SeeFollowerResult = objectType({
 // objectType for following pagination
 export const SeeFollowingResult = objectType({
   name: "SeeFollowingResult",
+  description: "SeeFollowingResult object type",
   definition(t) {
     t.nonNull.boolean("ok");
     t.string("error");
@@ -124,6 +126,52 @@ export const SeeFollowingResult = objectType({
           where: { followers: { id } },
         });
         return totalFollowings.length;
+      },
+    });
+  },
+});
+
+// Photo Type
+export const Photo = objectType({
+  name: "Photo",
+  description: "Photo object type",
+  definition(t) {
+    t.nonNull.string("id");
+    t.nonNull.list.field("user", { type: User });
+    t.nonNull.string("file");
+    t.string("caption");
+    t.list.field("hashtags", { type: Hashtag });
+    t.nonNull.string("createdAt");
+    t.nonNull.string("updatedAt");
+    t.nonNull.field("user", {
+      type: User,
+      resolve({ userId }) {
+        return client.user.findUnique({ where: { id: userId } });
+      },
+    });
+    t.list.field("hashtags", {
+      type: Hashtag,
+      resolve({ id }) {
+        return client.hashtag.findMany({ where: { photos: { some: { id } } } });
+      },
+    });
+  },
+});
+
+// Hashtag Type
+export const Hashtag = objectType({
+  name: "Hashtag",
+  description: "Hashtag object type",
+  definition(t) {
+    t.nonNull.string("id");
+    t.nonNull.string("hashtag");
+    t.nonNull.string("createdAt");
+    t.nonNull.string("updatedAt");
+    t.list.field("photos", { type: Photo });
+    // Computed field for calculating total photos with the hashtag
+    t.int("totalPhotos", {
+      resolve({ id }) {
+        return client.photo.count({ where: { hashtags: { some: { id } } } });
       },
     });
   },
