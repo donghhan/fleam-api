@@ -84,6 +84,9 @@ type Query {
   """See Hashtag Query"""
   seeHashtag(hashtag: String!): Hashtag
 
+  """See Like Query"""
+  seeLikes(id: String!): [User]
+
   """See Photo Query"""
   seePhoto(id: String!): Photo
 

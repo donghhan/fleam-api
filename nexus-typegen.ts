@@ -175,6 +175,7 @@ export interface NexusGenFieldTypes {
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
     seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
     seeHashtag: NexusGenRootTypes['Hashtag'] | null; // Hashtag
+    seeLikes: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     seePhoto: NexusGenRootTypes['Photo'] | null; // Photo
     seeProfile: NexusGenRootTypes['User'] | null; // User
   }
@@ -269,6 +270,7 @@ export interface NexusGenFieldTypeNames {
     seeFollowers: 'SeeFollowerResult'
     seeFollowings: 'SeeFollowingResult'
     seeHashtag: 'Hashtag'
+    seeLikes: 'User'
     seePhoto: 'Photo'
     seeProfile: 'User'
   }
@@ -364,6 +366,9 @@ export interface NexusGenArgTypes {
     }
     seeHashtag: { // args
       hashtag: string; // String!
+    }
+    seeLikes: { // args
+      id: string; // String!
     }
     seePhoto: { // args
       id: string; // String!

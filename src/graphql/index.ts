@@ -13,3 +13,4 @@ export * from "./Photo/Query/Photo.query";
 
 // Like Part
 export * from "./Photo/Mutation/Like.mutation";
+export * from "./Photo/Query/Like.query";

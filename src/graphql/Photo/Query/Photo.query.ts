@@ -1,4 +1,4 @@
-import { queryField, nonNull, stringArg, intArg } from "nexus";
+import { queryField, nonNull, stringArg } from "nexus";
 import client from "../../../client";
 
 // See Photo Query
