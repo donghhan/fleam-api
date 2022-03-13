@@ -1,5 +1,6 @@
-import { mutationField, nonNull, stringArg } from "nexus";
+import { intArg, mutationField, nonNull, stringArg } from "nexus";
 import client from "../../../client";
+import { connectHashtags } from "../Photo.utils";
 
 // Upload photo Mutation
 export const UploadPhotoMutation = mutationField("uploadPhoto", {
@@ -11,15 +12,11 @@ export const UploadPhotoMutation = mutationField("uploadPhoto", {
   },
   async resolve(_, { file, caption }, { signedInUser, protectorResolver }) {
     protectorResolver(signedInUser);
-    let hashtagObj = [];
+    let hashtagObj: any = [];
 
     // RegEx for hashtags
     if (caption) {
-      const hashtags = caption.match(/#[\u0E00-\u0E7Fa-zA-Z]+/g);
-      hashtagObj = hashtags.map((hashtag: string) => ({
-        where: { hashtag },
-        create: { hashtag },
-      }));
+      hashtagObj = connectHashtags(caption);
     }
 
     return client.photo.create({
@@ -40,3 +37,36 @@ export const UploadPhotoMutation = mutationField("uploadPhoto", {
 });
 
 // Edit Photo Mutation
+export const EditPhotoMutation = mutationField("editPhoto", {
+  type: "EditPhotoResult",
+  description: "Edit Photo Mutation",
+  args: {
+    id: nonNull(stringArg()),
+    caption: nonNull(stringArg()),
+  },
+  async resolve(_, { id, caption }, { signedInUser }) {
+    const oldPhoto = await client.photo.findFirst({
+      where: { id, userId: signedInUser.id },
+      include: { hashtags: { select: { hashtag: true } } },
+    });
+
+    if (!oldPhoto) {
+      return {
+        ok: false,
+        error: "Photo not found. ",
+      };
+    }
+
+    const updatedPhoto = await client.photo.update({
+      where: { id },
+      data: {
+        caption,
+        hashtags: {
+          disconnect: oldPhoto.hashtags,
+          connectOrCreate: connectHashtags(caption),
+        },
+      },
+    });
+    console.log(updatedPhoto);
+  },
+});

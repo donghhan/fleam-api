@@ -43,6 +43,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  EditPhotoResult: { // root type
+    error?: string | null; // String
+    ok: boolean; // Boolean!
+  }
   FollowUserResult: { // root type
     error?: string | null; // String
     ok: boolean; // Boolean!
@@ -104,6 +108,10 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  EditPhotoResult: { // field return type
+    error: string | null; // String
+    ok: boolean; // Boolean!
+  }
   FollowUserResult: { // field return type
     error: string | null; // String
     ok: boolean; // Boolean!
@@ -118,6 +126,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
+    editPhoto: NexusGenRootTypes['EditPhotoResult'] | null; // EditPhotoResult
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
     followUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
     searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
@@ -181,6 +190,10 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  EditPhotoResult: { // field return type name
+    error: 'String'
+    ok: 'Boolean'
+  }
   FollowUserResult: { // field return type name
     error: 'String'
     ok: 'Boolean'
@@ -195,6 +208,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createAccount: 'User'
+    editPhoto: 'EditPhotoResult'
     editProfile: 'OkResult'
     followUser: 'FollowUserResult'
     searchUsers: 'User'
@@ -269,6 +283,10 @@ export interface NexusGenArgTypes {
       firstName: string; // String!
       password: string; // String!
       username: string; // String!
+    }
+    editPhoto: { // args
+      caption: string; // String!
+      id: string; // String!
     }
     editProfile: { // args
       avatar?: NexusGenScalars['Upload'] | null; // Upload

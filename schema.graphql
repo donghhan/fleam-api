@@ -2,6 +2,11 @@
 ### Do not make changes to this file directly
 
 
+type EditPhotoResult {
+  error: String
+  ok: Boolean!
+}
+
 type FollowUserResult {
   error: String
   ok: Boolean!
@@ -19,6 +24,9 @@ type Hashtag {
 
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
+
+  """Edit Photo Mutation"""
+  editPhoto(caption: String!, id: String!): EditPhotoResult
   editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): OkResult
   followUser(username: String!): FollowUserResult
   searchUsers(keyword: String!): [User]

@@ -190,3 +190,12 @@ export const Hashtag = objectType({
     });
   },
 });
+
+// EditPhotoResult Type
+export const EditPhotoResult = objectType({
+  name: "EditPhotoResult",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
+  },
+});
