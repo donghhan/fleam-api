@@ -24,3 +24,15 @@ export const SeeHashtagQuery = queryField("seeHashtag", {
     return client.hashtag.findUnique({ where: { hashtag } });
   },
 });
+
+// Search Photo Query
+export const SearchPhotoQuery = queryField("searchPhoto", {
+  type: "Photo",
+  description: "Search Photo Query",
+  args: {
+    keyword: nonNull(stringArg()),
+  },
+  resolve(_, { keyword }) {
+    return client.photo.findMany({ where: { caption: { contains: keyword } } });
+  },
+});

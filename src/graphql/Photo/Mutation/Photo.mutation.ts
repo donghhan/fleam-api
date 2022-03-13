@@ -38,3 +38,5 @@ export const UploadPhotoMutation = mutationField("uploadPhoto", {
     });
   },
 });
+
+// Edit Photo Mutation

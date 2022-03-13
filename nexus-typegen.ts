@@ -88,7 +88,6 @@ export interface NexusGenObjects {
     following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     id: string; // String!
     password: string; // String!
-    photos?: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
     updatedAt: string; // String!
     username: string; // String!
   }
@@ -141,6 +140,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
+    searchPhoto: NexusGenRootTypes['Photo'] | null; // Photo
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
     seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
     seeHashtag: NexusGenRootTypes['Hashtag'] | null; // Hashtag
@@ -217,6 +217,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Query: { // field return type name
+    searchPhoto: 'Photo'
     seeFollowers: 'SeeFollowerResult'
     seeFollowings: 'SeeFollowingResult'
     seeHashtag: 'Hashtag'
@@ -295,6 +296,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    searchPhoto: { // args
+      keyword: string; // String!
+    }
     seeFollowers: { // args
       page: number; // Int!
       username: string; // String!

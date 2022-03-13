@@ -56,6 +56,13 @@ export const User = objectType({
         return client.user.count({ where: { following: { some: { id } } } });
       },
     });
+    // Photo resolver
+    t.list.field("photos", {
+      type: Photo,
+      resolve({ id }) {
+        return client.user.findUnique({ where: { id } }).photos();
+      },
+    });
   },
 });
 
