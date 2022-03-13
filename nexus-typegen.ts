@@ -46,12 +46,19 @@ export interface NexusGenObjects {
   Comment: { // root type
     createdAt: string; // String!
     id: string; // String!
-    isMyself: boolean; // Boolean!
     payload: string; // String!
     photo: NexusGenRootTypes['Photo']; // Photo!
     updatedAt: string; // String!
   }
   CreateCommentResult: { // root type
+    error?: string | null; // String
+    ok: boolean; // Boolean!
+  }
+  DeleteCommentResult: { // root type
+    error?: string | null; // String
+    ok: boolean; // Boolean!
+  }
+  DeletePhotoResult: { // root type
     error?: string | null; // String
     ok: boolean; // Boolean!
   }
@@ -90,7 +97,6 @@ export interface NexusGenObjects {
     createdAt: string; // String!
     file: string; // String!
     id: string; // String!
-    isMyself: boolean; // Boolean!
     updatedAt: string; // String!
   }
   Query: {};
@@ -143,6 +149,14 @@ export interface NexusGenFieldTypes {
     error: string | null; // String
     ok: boolean; // Boolean!
   }
+  DeleteCommentResult: { // field return type
+    error: string | null; // String
+    ok: boolean; // Boolean!
+  }
+  DeletePhotoResult: { // field return type
+    error: string | null; // String
+    ok: boolean; // Boolean!
+  }
   EditPhotoResult: { // field return type
     error: string | null; // String
     ok: boolean; // Boolean!
@@ -172,6 +186,8 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
     createComment: NexusGenRootTypes['CreateCommentResult'] | null; // CreateCommentResult
+    deleteComment: NexusGenRootTypes['DeleteCommentResult'] | null; // DeleteCommentResult
+    deletePhoto: NexusGenRootTypes['DeletePhotoResult'] | null; // DeletePhotoResult
     editPhoto: NexusGenRootTypes['EditPhotoResult'] | null; // EditPhotoResult
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
     followUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
@@ -188,6 +204,7 @@ export interface NexusGenFieldTypes {
   }
   Photo: { // field return type
     caption: string | null; // String
+    comments: number | null; // Int
     createdAt: string; // String!
     file: string; // String!
     hashtags: Array<NexusGenRootTypes['Hashtag'] | null> | null; // [Hashtag]
@@ -205,6 +222,7 @@ export interface NexusGenFieldTypes {
     seeHashtag: NexusGenRootTypes['Hashtag'] | null; // Hashtag
     seeLikes: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     seePhoto: NexusGenRootTypes['Photo'] | null; // Photo
+    seePhotoComments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
     seeProfile: NexusGenRootTypes['User'] | null; // User
   }
   SeeFollowerResult: { // field return type
@@ -253,6 +271,14 @@ export interface NexusGenFieldTypeNames {
     error: 'String'
     ok: 'Boolean'
   }
+  DeleteCommentResult: { // field return type name
+    error: 'String'
+    ok: 'Boolean'
+  }
+  DeletePhotoResult: { // field return type name
+    error: 'String'
+    ok: 'Boolean'
+  }
   EditPhotoResult: { // field return type name
     error: 'String'
     ok: 'Boolean'
@@ -282,6 +308,8 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createAccount: 'User'
     createComment: 'CreateCommentResult'
+    deleteComment: 'DeleteCommentResult'
+    deletePhoto: 'DeletePhotoResult'
     editPhoto: 'EditPhotoResult'
     editProfile: 'OkResult'
     followUser: 'FollowUserResult'
@@ -298,6 +326,7 @@ export interface NexusGenFieldTypeNames {
   }
   Photo: { // field return type name
     caption: 'String'
+    comments: 'Int'
     createdAt: 'String'
     file: 'String'
     hashtags: 'Hashtag'
@@ -315,6 +344,7 @@ export interface NexusGenFieldTypeNames {
     seeHashtag: 'Hashtag'
     seeLikes: 'User'
     seePhoto: 'Photo'
+    seePhotoComments: 'Comment'
     seeProfile: 'User'
   }
   SeeFollowerResult: { // field return type name
@@ -367,6 +397,12 @@ export interface NexusGenArgTypes {
       payload: string; // String!
       photoId: string; // String!
     }
+    deleteComment: { // args
+      id: string; // String!
+    }
+    deletePhoto: { // args
+      id: string; // String!
+    }
     editPhoto: { // args
       caption: string; // String!
       id: string; // String!
@@ -418,6 +454,9 @@ export interface NexusGenArgTypes {
       id: string; // String!
     }
     seePhoto: { // args
+      id: string; // String!
+    }
+    seePhotoComments: { // args
       id: string; // String!
     }
     seeProfile: { // args

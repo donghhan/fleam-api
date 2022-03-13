@@ -20,3 +20,4 @@ export * from "./Photo/Query/Like.query";
 
 // Comment
 export * from "./Comment/Mutation/Comment.mutation";
+export * from "./Comment/Query/Comment.query";

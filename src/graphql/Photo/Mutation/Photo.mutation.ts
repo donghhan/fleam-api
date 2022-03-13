@@ -73,3 +73,36 @@ export const EditPhotoMutation = mutationField("editPhoto", {
     };
   },
 });
+
+// Delete Photo Query
+export const DeletePhotoMutation = mutationField("deletePhoto", {
+  type: "DeletePhotoResult",
+  args: {
+    id: nonNull(stringArg()),
+  },
+  async resolve(_, { id }, { protectorResolver, signedInUser }) {
+    protectorResolver(signedInUser);
+
+    const photo = await client.photo.findUnique({
+      where: { id },
+      select: { userId: true },
+    });
+
+    if (!photo) {
+      return {
+        ok: false,
+        error: "Photo not found.",
+      };
+    } else if (photo.userId !== signedInUser.id) {
+      return {
+        ok: false,
+        error: "You are not authorized to change photo",
+      };
+    } else {
+      await client.photo.delete({ where: { id } });
+      return {
+        ok: true,
+      };
+    }
+  },
+});

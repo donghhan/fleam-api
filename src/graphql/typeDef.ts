@@ -150,6 +150,7 @@ export const Photo = objectType({
     t.list.field("hashtags", { type: Hashtag });
     t.nonNull.string("createdAt");
     t.nonNull.string("updatedAt");
+    t.nonNull.int("comments");
     t.nonNull.field("user", {
       type: User,
       resolve({ userId }) {
@@ -168,7 +169,22 @@ export const Photo = objectType({
       resolve: ({ id }) => client.like.count({ where: { photoId: id } }),
     });
     // isMyself computed field
-    t.nonNull.boolean("isMyself");
+    t.nonNull.boolean("isMyself", {
+      description: "Whether this photo belongs to user itself",
+      resolve: ({ userId }, _, { signedInUser }) => {
+        if (!signedInUser) {
+          return false;
+        }
+        return userId === signedInUser.id;
+      },
+    });
+    // Comment computed field
+    t.int("comments", {
+      description: "Number of comments of the photo",
+      resolve: ({ id }) => {
+        return client.comment.count({ where: { photoId: id } });
+      },
+    });
   },
 });
 
@@ -240,6 +256,16 @@ export const Comment = objectType({
     t.nonNull.string("payload");
     t.nonNull.field("photo", { type: Photo });
     t.nonNull.boolean("isMyself");
+    // isMyself computed field
+    t.nonNull.boolean("isMyself", {
+      description: "Whether this photo belongs to user itself",
+      resolve: ({ userId }, _, { signedInUser }) => {
+        if (!signedInUser) {
+          return false;
+        }
+        return userId === signedInUser.id;
+      },
+    });
   },
 });
 
@@ -247,6 +273,26 @@ export const Comment = objectType({
 export const CreateCommentResult = objectType({
   name: "CreateCommentResult",
   description: "Create Comment Result object type",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
+  },
+});
+
+// Delete Photo Result Type
+export const DeletePhotoResult = objectType({
+  name: "DeletePhotoResult",
+  description: "Delete Photo Result object type",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
+  },
+});
+
+// Delete Photo Result Type
+export const DeleteCommentResult = objectType({
+  name: "DeleteCommentResult",
+  description: "Delete Comment Result object type",
   definition(t) {
     t.nonNull.boolean("ok");
     t.string("error");

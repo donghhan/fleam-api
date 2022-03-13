@@ -6,6 +6,8 @@
 type Comment {
   createdAt: String!
   id: String!
+
+  """Whether this photo belongs to user itself"""
   isMyself: Boolean!
   payload: String!
   photo: Photo!
@@ -14,6 +16,18 @@ type Comment {
 
 """Create Comment Result object type"""
 type CreateCommentResult {
+  error: String
+  ok: Boolean!
+}
+
+"""Delete Comment Result object type"""
+type DeleteCommentResult {
+  error: String
+  ok: Boolean!
+}
+
+"""Delete Photo Result object type"""
+type DeletePhotoResult {
   error: String
   ok: Boolean!
 }
@@ -55,6 +69,8 @@ type LikePhotoResult {
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
   createComment(payload: String!, photoId: String!): CreateCommentResult
+  deleteComment(id: String!): DeleteCommentResult
+  deletePhoto(id: String!): DeletePhotoResult
 
   """Edit Photo Mutation"""
   editPhoto(caption: String!, id: String!): EditPhotoResult
@@ -81,10 +97,15 @@ type OkResult {
 """Photo object type"""
 type Photo {
   caption: String
+
+  """Number of comments of the photo"""
+  comments: Int
   createdAt: String!
   file: String!
   hashtags: [Hashtag]
   id: String!
+
+  """Whether this photo belongs to user itself"""
   isMyself: Boolean!
 
   """Number of likes of the photo"""
@@ -110,6 +131,9 @@ type Query {
 
   """See Photo Query"""
   seePhoto(id: String!): Photo
+
+  """See Photo Comments Query"""
+  seePhotoComments(id: String!): [Comment]
 
   """Query field for viewing the user profile"""
   seeProfile(username: String!): User
