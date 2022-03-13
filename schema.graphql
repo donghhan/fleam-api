@@ -2,6 +2,22 @@
 ### Do not make changes to this file directly
 
 
+"""Comment object type"""
+type Comment {
+  createdAt: String!
+  id: String!
+  isMyself: Boolean!
+  payload: String!
+  photo: Photo!
+  updatedAt: String!
+}
+
+"""Create Comment Result object type"""
+type CreateCommentResult {
+  error: String
+  ok: Boolean!
+}
+
 type EditPhotoResult {
   error: String
   ok: Boolean!
@@ -38,6 +54,7 @@ type LikePhotoResult {
 
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
+  createComment(payload: String!, photoId: String!): CreateCommentResult
 
   """Edit Photo Mutation"""
   editPhoto(caption: String!, id: String!): EditPhotoResult
@@ -68,6 +85,7 @@ type Photo {
   file: String!
   hashtags: [Hashtag]
   id: String!
+  isMyself: Boolean!
 
   """Number of likes of the photo"""
   likes: Int!

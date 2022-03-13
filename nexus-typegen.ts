@@ -43,6 +43,18 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Comment: { // root type
+    createdAt: string; // String!
+    id: string; // String!
+    isMyself: boolean; // Boolean!
+    payload: string; // String!
+    photo: NexusGenRootTypes['Photo']; // Photo!
+    updatedAt: string; // String!
+  }
+  CreateCommentResult: { // root type
+    error?: string | null; // String
+    ok: boolean; // Boolean!
+  }
   EditPhotoResult: { // root type
     error?: string | null; // String
     ok: boolean; // Boolean!
@@ -78,6 +90,7 @@ export interface NexusGenObjects {
     createdAt: string; // String!
     file: string; // String!
     id: string; // String!
+    isMyself: boolean; // Boolean!
     updatedAt: string; // String!
   }
   Query: {};
@@ -118,6 +131,18 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Comment: { // field return type
+    createdAt: string; // String!
+    id: string; // String!
+    isMyself: boolean; // Boolean!
+    payload: string; // String!
+    photo: NexusGenRootTypes['Photo']; // Photo!
+    updatedAt: string; // String!
+  }
+  CreateCommentResult: { // field return type
+    error: string | null; // String
+    ok: boolean; // Boolean!
+  }
   EditPhotoResult: { // field return type
     error: string | null; // String
     ok: boolean; // Boolean!
@@ -146,6 +171,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
+    createComment: NexusGenRootTypes['CreateCommentResult'] | null; // CreateCommentResult
     editPhoto: NexusGenRootTypes['EditPhotoResult'] | null; // EditPhotoResult
     editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
     followUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
@@ -166,6 +192,7 @@ export interface NexusGenFieldTypes {
     file: string; // String!
     hashtags: Array<NexusGenRootTypes['Hashtag'] | null> | null; // [Hashtag]
     id: string; // String!
+    isMyself: boolean; // Boolean!
     likes: number; // Int!
     updatedAt: string; // String!
     user: NexusGenRootTypes['User']; // User!
@@ -214,6 +241,18 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Comment: { // field return type name
+    createdAt: 'String'
+    id: 'String'
+    isMyself: 'Boolean'
+    payload: 'String'
+    photo: 'Photo'
+    updatedAt: 'String'
+  }
+  CreateCommentResult: { // field return type name
+    error: 'String'
+    ok: 'Boolean'
+  }
   EditPhotoResult: { // field return type name
     error: 'String'
     ok: 'Boolean'
@@ -242,6 +281,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createAccount: 'User'
+    createComment: 'CreateCommentResult'
     editPhoto: 'EditPhotoResult'
     editProfile: 'OkResult'
     followUser: 'FollowUserResult'
@@ -262,6 +302,7 @@ export interface NexusGenFieldTypeNames {
     file: 'String'
     hashtags: 'Hashtag'
     id: 'String'
+    isMyself: 'Boolean'
     likes: 'Int'
     updatedAt: 'String'
     user: 'User'
@@ -321,6 +362,10 @@ export interface NexusGenArgTypes {
       firstName: string; // String!
       password: string; // String!
       username: string; // String!
+    }
+    createComment: { // args
+      payload: string; // String!
+      photoId: string; // String!
     }
     editPhoto: { // args
       caption: string; // String!

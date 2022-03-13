@@ -167,6 +167,8 @@ export const Photo = objectType({
       description: "Number of likes of the photo",
       resolve: ({ id }) => client.like.count({ where: { photoId: id } }),
     });
+    // isMyself computed field
+    t.nonNull.boolean("isMyself");
   },
 });
 
@@ -221,6 +223,30 @@ export const Like = objectType({
 export const LikePhotoResult = objectType({
   name: "LikePhotoResult",
   description: "LikePhotoResult object type",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("error");
+  },
+});
+
+// Comment Type
+export const Comment = objectType({
+  name: "Comment",
+  description: "Comment object type",
+  definition(t) {
+    t.nonNull.string("id");
+    t.nonNull.string("createdAt");
+    t.nonNull.string("updatedAt");
+    t.nonNull.string("payload");
+    t.nonNull.field("photo", { type: Photo });
+    t.nonNull.boolean("isMyself");
+  },
+});
+
+// Create Comment Result Type
+export const CreateCommentResult = objectType({
+  name: "CreateCommentResult",
+  description: "Create Comment Result object type",
   definition(t) {
     t.nonNull.boolean("ok");
     t.string("error");
