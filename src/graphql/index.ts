@@ -5,6 +5,7 @@ export * from "./typeDef";
 export * from "./User/Mutation/User.mutation";
 export * from "./User/Mutation/UserFollow.mutation";
 export * from "./User/Query/User.query";
+export * from "./User/Query/IsMyself.query";
 export * from "./User/Query/UserFollow.query";
 
 // Photo Part
@@ -23,5 +24,6 @@ export * from "./Comment/Mutation/Comment.mutation";
 export * from "./Comment/Query/Comment.query";
 
 // Message
+export * from "./Message/Query/seeRooms.query";
 export * from "./Message/Query/seeRoom.query";
 export * from "./Message/Mutation/createRoom.mutation";

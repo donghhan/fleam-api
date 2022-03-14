@@ -1,14 +1,18 @@
-import { queryField, list } from "nexus";
+import { queryField, list, nonNull, stringArg } from "nexus";
 import client from "../../../client";
 import { protectorResolver } from "../../../utils/user.utils";
 
 // seeRoom Query
-export const SeeRoomsQuery = queryField("seeRooms", {
-  type: list("ChatRoom"),
-  description: "See Rooms Query",
-  resolve: protectorResolver(async (_, __, { signedInUser }) => {
-    return await client.chatRoom.findMany({
-      where: { users: { some: { id: signedInUser.id } } },
+export const SeeRoomQuery = queryField("seeRoom", {
+  type: "ChatRoom",
+  description: "See Room Query",
+  args: {
+    id: nonNull(stringArg()),
+  },
+  resolve: protectorResolver((_, { id }, { signedInUser }) => {
+    // Finding a chat room with its ID and in which signed in users are.
+    client.chatRoom.findFirst({
+      where: { id, users: { some: { id: signedInUser.id } } },
     });
   }),
 });

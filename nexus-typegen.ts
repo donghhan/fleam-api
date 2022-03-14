@@ -203,6 +203,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
+    isMyself: NexusGenRootTypes['User'] | null; // User
     searchPhoto: NexusGenRootTypes['Photo'] | null; // Photo
     seeFeed: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
@@ -212,6 +213,7 @@ export interface NexusGenFieldTypes {
     seePhoto: NexusGenRootTypes['Photo'] | null; // Photo
     seePhotoComments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
     seeProfile: NexusGenRootTypes['User'] | null; // User
+    seeRoom: NexusGenRootTypes['ChatRoom'] | null; // ChatRoom
     seeRooms: Array<NexusGenRootTypes['ChatRoom'] | null> | null; // [ChatRoom]
   }
   SeeFollowerResult: { // field return type
@@ -323,6 +325,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Query: { // field return type name
+    isMyself: 'User'
     searchPhoto: 'Photo'
     seeFeed: 'Photo'
     seeFollowers: 'SeeFollowerResult'
@@ -332,6 +335,7 @@ export interface NexusGenFieldTypeNames {
     seePhoto: 'Photo'
     seePhotoComments: 'Comment'
     seeProfile: 'User'
+    seeRoom: 'ChatRoom'
     seeRooms: 'ChatRoom'
   }
   SeeFollowerResult: { // field return type name
@@ -462,6 +466,9 @@ export interface NexusGenArgTypes {
     }
     seeProfile: { // args
       username: string; // String!
+    }
+    seeRoom: { // args
+      id: string; // String!
     }
   }
 }

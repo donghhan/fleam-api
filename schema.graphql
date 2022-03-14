@@ -102,6 +102,9 @@ type Photo {
 }
 
 type Query {
+  """isMyself Query"""
+  isMyself: User
+
   """Search Photo Query"""
   searchPhoto(keyword: String!): Photo
 
@@ -124,6 +127,9 @@ type Query {
 
   """Query field for viewing the user profile"""
   seeProfile(username: String!): User
+
+  """See Room Query"""
+  seeRoom(id: String!): ChatRoom
 
   """See Rooms Query"""
   seeRooms: [ChatRoom]
