@@ -3,6 +3,13 @@ import client from "../client";
 import { FLEAM_SECRET_KEY } from "./keys";
 import { JwtPayload } from "./interface";
 
+interface IProtectorResolver {
+  protectorResolver: any;
+}
+interface ICustomResolver {
+  customResolver: Function;
+}
+
 export const getUser = async (authorization: any) => {
   try {
     if (!authorization) {
@@ -26,8 +33,19 @@ export const getUser = async (authorization: any) => {
   }
 };
 
-export const protectorResolver = (user: any) => {
-  if (!user) {
-    throw new Error("You should signin first.");
-  }
-};
+export function protectorResolver(customResolver): any {
+  return function (root, args, context, info) {
+    if (!context.signedInUser) {
+      const query = info.operation.operation === "query";
+      if (query) {
+        return null;
+      } else {
+        return {
+          ok: false,
+          error: "Please signin first.",
+        };
+      }
+    }
+    return customResolver(root, args, context, info);
+  };
+}

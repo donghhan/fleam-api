@@ -14,30 +14,7 @@ type Comment {
   updatedAt: String!
 }
 
-"""Create Comment Result object type"""
-type CreateCommentResult {
-  error: String
-  ok: Boolean!
-}
-
-"""Delete Comment Result object type"""
-type DeleteCommentResult {
-  error: String
-  ok: Boolean!
-}
-
-"""Delete Photo Result object type"""
-type DeletePhotoResult {
-  error: String
-  ok: Boolean!
-}
-
-type EditPhotoResult {
-  error: String
-  ok: Boolean!
-}
-
-type FollowUserResult {
+type GlobalResult {
   error: String
   ok: Boolean!
 }
@@ -60,38 +37,26 @@ type Like {
   updatedAt: String!
 }
 
-"""LikePhotoResult object type"""
-type LikePhotoResult {
-  error: String
-  ok: Boolean!
-}
-
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
-  createComment(payload: String!, photoId: String!): CreateCommentResult
-  deleteComment(id: String!): DeleteCommentResult
-  deletePhoto(id: String!): DeletePhotoResult
+  createComment(payload: String!, photoId: String!): GlobalResult
+  deleteComment(id: String!): GlobalResult
+  deletePhoto(id: String!): GlobalResult
+  editComment(id: String!, payload: String!): GlobalResult
 
   """Edit Photo Mutation"""
-  editPhoto(caption: String!, id: String!): EditPhotoResult
-  editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): OkResult
-  followUser(username: String!): FollowUserResult
+  editPhoto(caption: String!, id: String!): GlobalResult
+  editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): GlobalResult
+  followUser(username: String!): GlobalResult
   searchUsers(keyword: String!): [User]
-  signin(password: String!, username: String!): OkResult
+  signin(password: String!, username: String!): SigninWithTokenResult
 
   """Like Photo Mutation"""
-  toggleLike(id: String!): LikePhotoResult
-  unfollowUser(username: String!): FollowUserResult
+  toggleLike(id: String!): GlobalResult
+  unfollowUser(username: String!): GlobalResult
 
   """Upload Photo Mutation"""
   uploadPhoto(caption: String, file: String!): Photo
-}
-
-"""Object type for showing success/failure of signin & signup"""
-type OkResult {
-  error: String
-  ok: Boolean!
-  token: String
 }
 
 """Photo object type"""
@@ -157,6 +122,13 @@ type SeeFollowingResult {
 
   """Number of total following"""
   totalFollowing: Int
+}
+
+"""Object type for showing success/failure of signin & signup"""
+type SigninWithTokenResult {
+  error: String
+  ok: Boolean!
+  token: String
 }
 
 """The `Upload` scalar type represents a file upload."""

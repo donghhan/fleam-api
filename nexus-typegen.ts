@@ -4,6 +4,7 @@
  */
 
 
+import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 import type { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
@@ -50,23 +51,7 @@ export interface NexusGenObjects {
     photo: NexusGenRootTypes['Photo']; // Photo!
     updatedAt: string; // String!
   }
-  CreateCommentResult: { // root type
-    error?: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  DeleteCommentResult: { // root type
-    error?: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  DeletePhotoResult: { // root type
-    error?: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  EditPhotoResult: { // root type
-    error?: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  FollowUserResult: { // root type
+  GlobalResult: { // root type
     error?: string | null; // String
     ok: boolean; // Boolean!
   }
@@ -82,16 +67,7 @@ export interface NexusGenObjects {
     photo: NexusGenRootTypes['Photo']; // Photo!
     updatedAt: string; // String!
   }
-  LikePhotoResult: { // root type
-    error?: string | null; // String
-    ok: boolean; // Boolean!
-  }
   Mutation: {};
-  OkResult: { // root type
-    error?: string | null; // String
-    ok: boolean; // Boolean!
-    token?: string | null; // String
-  }
   Photo: { // root type
     caption?: string | null; // String
     createdAt: string; // String!
@@ -110,6 +86,11 @@ export interface NexusGenObjects {
     error?: string | null; // String
     following?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     ok: boolean; // Boolean!
+  }
+  SigninWithTokenResult: { // root type
+    error?: string | null; // String
+    ok: boolean; // Boolean!
+    token?: string | null; // String
   }
   User: { // root type
     avatar?: string | null; // String
@@ -145,23 +126,7 @@ export interface NexusGenFieldTypes {
     photo: NexusGenRootTypes['Photo']; // Photo!
     updatedAt: string; // String!
   }
-  CreateCommentResult: { // field return type
-    error: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  DeleteCommentResult: { // field return type
-    error: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  DeletePhotoResult: { // field return type
-    error: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  EditPhotoResult: { // field return type
-    error: string | null; // String
-    ok: boolean; // Boolean!
-  }
-  FollowUserResult: { // field return type
+  GlobalResult: { // field return type
     error: string | null; // String
     ok: boolean; // Boolean!
   }
@@ -179,28 +144,20 @@ export interface NexusGenFieldTypes {
     photo: NexusGenRootTypes['Photo']; // Photo!
     updatedAt: string; // String!
   }
-  LikePhotoResult: { // field return type
-    error: string | null; // String
-    ok: boolean; // Boolean!
-  }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
-    createComment: NexusGenRootTypes['CreateCommentResult'] | null; // CreateCommentResult
-    deleteComment: NexusGenRootTypes['DeleteCommentResult'] | null; // DeleteCommentResult
-    deletePhoto: NexusGenRootTypes['DeletePhotoResult'] | null; // DeletePhotoResult
-    editPhoto: NexusGenRootTypes['EditPhotoResult'] | null; // EditPhotoResult
-    editProfile: NexusGenRootTypes['OkResult'] | null; // OkResult
-    followUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
+    createComment: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
+    deleteComment: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
+    deletePhoto: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
+    editComment: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
+    editPhoto: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
+    editProfile: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
+    followUser: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    signin: NexusGenRootTypes['OkResult'] | null; // OkResult
-    toggleLike: NexusGenRootTypes['LikePhotoResult'] | null; // LikePhotoResult
-    unfollowUser: NexusGenRootTypes['FollowUserResult'] | null; // FollowUserResult
+    signin: NexusGenRootTypes['SigninWithTokenResult'] | null; // SigninWithTokenResult
+    toggleLike: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
+    unfollowUser: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     uploadPhoto: NexusGenRootTypes['Photo'] | null; // Photo
-  }
-  OkResult: { // field return type
-    error: string | null; // String
-    ok: boolean; // Boolean!
-    token: string | null; // String
   }
   Photo: { // field return type
     caption: string | null; // String
@@ -238,6 +195,11 @@ export interface NexusGenFieldTypes {
     ok: boolean; // Boolean!
     totalFollowing: number | null; // Int
   }
+  SigninWithTokenResult: { // field return type
+    error: string | null; // String
+    ok: boolean; // Boolean!
+    token: string | null; // String
+  }
   User: { // field return type
     avatar: string | null; // String
     bio: string | null; // String
@@ -267,23 +229,7 @@ export interface NexusGenFieldTypeNames {
     photo: 'Photo'
     updatedAt: 'String'
   }
-  CreateCommentResult: { // field return type name
-    error: 'String'
-    ok: 'Boolean'
-  }
-  DeleteCommentResult: { // field return type name
-    error: 'String'
-    ok: 'Boolean'
-  }
-  DeletePhotoResult: { // field return type name
-    error: 'String'
-    ok: 'Boolean'
-  }
-  EditPhotoResult: { // field return type name
-    error: 'String'
-    ok: 'Boolean'
-  }
-  FollowUserResult: { // field return type name
+  GlobalResult: { // field return type name
     error: 'String'
     ok: 'Boolean'
   }
@@ -301,28 +247,20 @@ export interface NexusGenFieldTypeNames {
     photo: 'Photo'
     updatedAt: 'String'
   }
-  LikePhotoResult: { // field return type name
-    error: 'String'
-    ok: 'Boolean'
-  }
   Mutation: { // field return type name
     createAccount: 'User'
-    createComment: 'CreateCommentResult'
-    deleteComment: 'DeleteCommentResult'
-    deletePhoto: 'DeletePhotoResult'
-    editPhoto: 'EditPhotoResult'
-    editProfile: 'OkResult'
-    followUser: 'FollowUserResult'
+    createComment: 'GlobalResult'
+    deleteComment: 'GlobalResult'
+    deletePhoto: 'GlobalResult'
+    editComment: 'GlobalResult'
+    editPhoto: 'GlobalResult'
+    editProfile: 'GlobalResult'
+    followUser: 'GlobalResult'
     searchUsers: 'User'
-    signin: 'OkResult'
-    toggleLike: 'LikePhotoResult'
-    unfollowUser: 'FollowUserResult'
+    signin: 'SigninWithTokenResult'
+    toggleLike: 'GlobalResult'
+    unfollowUser: 'GlobalResult'
     uploadPhoto: 'Photo'
-  }
-  OkResult: { // field return type name
-    error: 'String'
-    ok: 'Boolean'
-    token: 'String'
   }
   Photo: { // field return type name
     caption: 'String'
@@ -359,6 +297,11 @@ export interface NexusGenFieldTypeNames {
     following: 'User'
     ok: 'Boolean'
     totalFollowing: 'Int'
+  }
+  SigninWithTokenResult: { // field return type name
+    error: 'String'
+    ok: 'Boolean'
+    token: 'String'
   }
   User: { // field return type name
     avatar: 'String'
@@ -402,6 +345,10 @@ export interface NexusGenArgTypes {
     }
     deletePhoto: { // args
       id: string; // String!
+    }
+    editComment: { // args
+      id: string; // String!
+      payload: string; // String!
     }
     editPhoto: { // args
       caption: string; // String!
@@ -528,6 +475,15 @@ declare global {
   interface NexusGenPluginInputTypeConfig<TypeName extends string> {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
+    /**
+     * Authorization for an individual field. Returning "true"
+     * or "Promise<true>" means the field can be accessed.
+     * Returning "false" or "Promise<false>" will respond
+     * with a "Not Authorized" error for the field.
+     * Returning or throwing an error will also prevent the
+     * resolver from executing.
+     */
+    authorize?: FieldAuthorizeResolver<TypeName, FieldName>
   }
   interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
   }

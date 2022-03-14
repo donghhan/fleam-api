@@ -1,6 +1,7 @@
-import { intArg, mutationField, nonNull, stringArg } from "nexus";
+import { mutationField, nonNull, stringArg } from "nexus";
 import client from "../../../client";
 import { connectHashtags } from "../Photo.utils";
+import { protectorResolver } from "../../../utils/user.utils";
 
 // Upload photo Mutation
 export const UploadPhotoMutation = mutationField("uploadPhoto", {
@@ -10,8 +11,7 @@ export const UploadPhotoMutation = mutationField("uploadPhoto", {
     file: nonNull(stringArg()),
     caption: stringArg(),
   },
-  async resolve(_, { file, caption }, { signedInUser, protectorResolver }) {
-    protectorResolver(signedInUser);
+  resolve: protectorResolver((_, { file, caption }, { signedInUser }) => {
     let hashtagObj: any = [];
 
     // RegEx for hashtags
@@ -33,12 +33,12 @@ export const UploadPhotoMutation = mutationField("uploadPhoto", {
         }),
       },
     });
-  },
+  }),
 });
 
 // Edit Photo Mutation
 export const EditPhotoMutation = mutationField("editPhoto", {
-  type: "EditPhotoResult",
+  type: "GlobalResult",
   description: "Edit Photo Mutation",
   args: {
     id: nonNull(stringArg()),
@@ -76,13 +76,11 @@ export const EditPhotoMutation = mutationField("editPhoto", {
 
 // Delete Photo Query
 export const DeletePhotoMutation = mutationField("deletePhoto", {
-  type: "DeletePhotoResult",
+  type: "GlobalResult",
   args: {
     id: nonNull(stringArg()),
   },
-  async resolve(_, { id }, { protectorResolver, signedInUser }) {
-    protectorResolver(signedInUser);
-
+  resolve: protectorResolver(async (_, { id }, { signedInUser }) => {
     const photo = await client.photo.findUnique({
       where: { id },
       select: { userId: true },
@@ -104,5 +102,5 @@ export const DeletePhotoMutation = mutationField("deletePhoto", {
         ok: true,
       };
     }
-  },
+  }),
 });

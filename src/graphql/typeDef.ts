@@ -67,8 +67,8 @@ export const User = objectType({
 });
 
 // OkResult
-export const OkResult = objectType({
-  name: "OkResult",
+export const SigninWithTokenResult = objectType({
+  name: "SigninWithTokenResult",
   description: "Object type for showing success/failure of signin & signup",
   definition(t) {
     t.nonNull.boolean("ok"), t.string("error"), t.string("token");
@@ -78,9 +78,9 @@ export const OkResult = objectType({
 // scalarType for file uploads
 export const Upload = asNexusMethod(GraphQLUpload, "upload");
 
-// objectType for fetching following results
-export const FollowUserResult = objectType({
-  name: "FollowUserResult",
+// Global Result Type
+export const GlobalResult = objectType({
+  name: "GlobalResult",
   definition(t) {
     t.nonNull.boolean("ok");
     t.string("error");
@@ -214,15 +214,6 @@ export const Hashtag = objectType({
   },
 });
 
-// EditPhotoResult Type
-export const EditPhotoResult = objectType({
-  name: "EditPhotoResult",
-  definition(t) {
-    t.nonNull.boolean("ok");
-    t.string("error");
-  },
-});
-
 // Like Type
 export const Like = objectType({
   name: "Like",
@@ -232,16 +223,6 @@ export const Like = objectType({
     t.nonNull.string("createdAt");
     t.nonNull.string("updatedAt");
     t.nonNull.field("photo", { type: Photo });
-  },
-});
-
-// LikePhotoResult Type
-export const LikePhotoResult = objectType({
-  name: "LikePhotoResult",
-  description: "LikePhotoResult object type",
-  definition(t) {
-    t.nonNull.boolean("ok");
-    t.string("error");
   },
 });
 
@@ -266,35 +247,5 @@ export const Comment = objectType({
         return userId === signedInUser.id;
       },
     });
-  },
-});
-
-// Create Comment Result Type
-export const CreateCommentResult = objectType({
-  name: "CreateCommentResult",
-  description: "Create Comment Result object type",
-  definition(t) {
-    t.nonNull.boolean("ok");
-    t.string("error");
-  },
-});
-
-// Delete Photo Result Type
-export const DeletePhotoResult = objectType({
-  name: "DeletePhotoResult",
-  description: "Delete Photo Result object type",
-  definition(t) {
-    t.nonNull.boolean("ok");
-    t.string("error");
-  },
-});
-
-// Delete Photo Result Type
-export const DeleteCommentResult = objectType({
-  name: "DeleteCommentResult",
-  description: "Delete Comment Result object type",
-  definition(t) {
-    t.nonNull.boolean("ok");
-    t.string("error");
   },
 });

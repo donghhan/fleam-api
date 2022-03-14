@@ -4,14 +4,11 @@ import { protectorResolver } from "../../../utils/user.utils";
 
 // Follow User Mutation
 export const FollowUserMutation = mutationField("followUser", {
-  type: "FollowUserResult",
+  type: "GlobalResult",
   args: {
     username: nonNull(stringArg()),
   },
-  async resolve(_, { username }, { signedInUser }) {
-    protectorResolver(signedInUser);
-
-    // Check if that User exists with that username
+  resolve: protectorResolver(async (_, { username }, { signedInUser }) => {
     const alreadyExistingUser = await client.user.findUnique({
       where: { username },
     });
@@ -39,18 +36,16 @@ export const FollowUserMutation = mutationField("followUser", {
     return {
       ok: true,
     };
-  },
+  }),
 });
 
 // Unfollow User Mutation
 export const UnfollowUserMutation = mutationField("unfollowUser", {
-  type: "FollowUserResult",
+  type: "GlobalResult",
   args: {
     username: nonNull(stringArg()),
   },
-  async resolve(_, { username }, { signedInUser }) {
-    protectorResolver(signedInUser);
-
+  resolve: protectorResolver(async (_, { username }, { signedInUser }) => {
     // Check if that User exists with that username
     const alreadyExistingUser = await client.user.findUnique({
       where: { username },
@@ -77,7 +72,7 @@ export const UnfollowUserMutation = mutationField("unfollowUser", {
     return {
       ok: true,
     };
-  },
+  }),
 });
 
 // Searching User Mutation

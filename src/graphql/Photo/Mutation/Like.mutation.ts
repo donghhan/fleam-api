@@ -1,16 +1,15 @@
 import { mutationField, nonNull, stringArg } from "nexus";
 import client from "../../../client";
+import { protectorResolver } from "../../../utils/user.utils";
 
 // Like Photo Mutation
 export const LikePhotoMutation = mutationField("toggleLike", {
-  type: "LikePhotoResult",
+  type: "GlobalResult",
   description: "Like Photo Mutation",
   args: {
     id: nonNull(stringArg()),
   },
-  async resolve(_, { id }, { signedInUser, protectorResolver }) {
-    protectorResolver(signedInUser);
-
+  resolve: protectorResolver(async (_, { id }, { signedInUser }) => {
     const photo = await client.photo.findUnique({ where: { id } });
 
     if (!photo) {
@@ -47,5 +46,5 @@ export const LikePhotoMutation = mutationField("toggleLike", {
     return {
       ok: true,
     };
-  },
+  }),
 });

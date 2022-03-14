@@ -1,7 +1,5 @@
-import { createWriteStream } from "fs";
-import { nonNull, stringArg, queryField, list, intArg } from "nexus";
+import { nonNull, stringArg, queryField, intArg } from "nexus";
 import client from "../../../client";
-import { FLEAM_SECRET_KEY } from "../../../utils/keys";
 
 export const SeeFollowerQuery = queryField("seeFollowers", {
   type: "SeeFollowerResult",

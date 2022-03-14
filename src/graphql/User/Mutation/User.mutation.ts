@@ -5,17 +5,16 @@ import client from "../../../client";
 import jwt from "jsonwebtoken";
 // Secret Key
 import { FLEAM_SECRET_KEY } from "../../../utils/keys";
+import { protectorResolver } from "../../../utils/user.utils";
 
 // Signin Mutation
 export const SigninMutation = mutationField("signin", {
-  type: "OkResult",
+  type: "SigninWithTokenResult",
   args: {
     username: nonNull(stringArg()),
     password: nonNull(stringArg()),
   },
-  async resolve(_, args, ctx) {
-    const { id, username, password } = args;
-
+  async resolve(_, { username, password }) {
     // Finding user with username
     const registeredUser = await client.user.findFirst({
       where: {
@@ -65,7 +64,7 @@ export const CreateAccountMutation = mutationField("createAccount", {
     email: nonNull(stringArg()),
     password: nonNull(stringArg()),
   },
-  async resolve(_, { firstName, username, email, password }, ctx) {
+  async resolve(_, { firstName, username, email, password }) {
     // Check if username or email already exists
     const alreadyExistingUser = await client.user.findFirst({
       where: {
@@ -107,7 +106,7 @@ export const CreateAccountMutation = mutationField("createAccount", {
 
 // editProfile Mutation
 export const EditProfileMutation = mutationField("editProfile", {
-  type: "OkResult",
+  type: "GlobalResult",
   args: {
     firstName: stringArg(),
     email: stringArg(),
@@ -115,48 +114,48 @@ export const EditProfileMutation = mutationField("editProfile", {
     bio: stringArg(),
     avatar: arg({ type: "Upload" }),
   },
-  async resolve(
-    _,
-    { firstName, email, password: newPassword, bio, avatar },
-    { signedInUser, protectorResolver }
-  ) {
-    protectorResolver(signedInUser);
+  resolve: protectorResolver(
+    async (
+      _,
+      { firstName, email, password: newPassword, bio, avatar },
+      { signedInUser }
+    ) => {
+      let avatarUrl: string | null = null;
+      let hashedPassword: string | null = null;
 
-    let avatarUrl = null;
-    let hashedPassword = null;
+      if (avatar) {
+        const { filename, createReadStream } = await avatar;
+        const newFilename = `${signedInUser.id}-${filename}`;
+        const readStream = createReadStream();
+        const writeStream = createWriteStream(
+          process.cwd() + "/uploads/" + filename
+        );
+        readStream.pipe(writeStream);
+        avatarUrl = `http://localhost:4500/graphql/static/${newFilename}`;
+      }
 
-    if (avatar) {
-      const { filename, createReadStream } = await avatar;
-      const newFilename = `${signedInUser.id}-${filename}`;
-      const readStream = createReadStream();
-      const writeStream = createWriteStream(
-        process.cwd() + "/uploads/" + filename
-      );
-      readStream.pipe(writeStream);
-      avatarUrl = `http://localhost:4500/graphql/static/${newFilename}`;
+      if (newPassword) {
+        hashedPassword = await bcrypt.hash(newPassword, 10);
+      }
+
+      const updateComplete = await client.user.update({
+        where: { id: signedInUser.id },
+        data: {
+          firstName,
+          email,
+          bio,
+          ...(hashedPassword && { password: hashedPassword }),
+          ...(avatarUrl && { avatar: avatarUrl }),
+        },
+      });
+
+      if (updateComplete.id) {
+        return {
+          ok: true,
+        };
+      } else {
+        return { ok: false, error: "Could not update profile." };
+      }
     }
-
-    if (newPassword) {
-      hashedPassword = await bcrypt.hash(newPassword, 10);
-    }
-
-    const updateComplete = await client.user.update({
-      where: { id: signedInUser.id },
-      data: {
-        firstName,
-        email,
-        bio,
-        ...(hashedPassword && { password: hashedPassword }),
-        ...(avatarUrl && { avatar: avatarUrl }),
-      },
-    });
-
-    if (updateComplete.id) {
-      return {
-        ok: true,
-      };
-    } else {
-      return { ok: false, error: "Could not update profile." };
-    }
-  },
+  ),
 });
