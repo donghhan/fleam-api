@@ -68,6 +68,9 @@ type Mutation {
   editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): GlobalResult
   followUser(username: String!): GlobalResult
   searchUsers(keyword: String!): [User]
+
+  """Send Message Mutation"""
+  sendMessage(chatRoomId: String, payload: String!, userId: String): GlobalResult
   signin(password: String!, username: String!): SigninWithTokenResult
 
   """Like Photo Mutation"""

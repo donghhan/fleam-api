@@ -184,6 +184,7 @@ export interface NexusGenFieldTypes {
     editProfile: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     followUser: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    sendMessage: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     signin: NexusGenRootTypes['SigninWithTokenResult'] | null; // SigninWithTokenResult
     toggleLike: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     unfollowUser: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
@@ -303,6 +304,7 @@ export interface NexusGenFieldTypeNames {
     editProfile: 'GlobalResult'
     followUser: 'GlobalResult'
     searchUsers: 'User'
+    sendMessage: 'GlobalResult'
     signin: 'SigninWithTokenResult'
     toggleLike: 'GlobalResult'
     unfollowUser: 'GlobalResult'
@@ -413,6 +415,11 @@ export interface NexusGenArgTypes {
     }
     searchUsers: { // args
       keyword: string; // String!
+    }
+    sendMessage: { // args
+      chatRoomId?: string | null; // String
+      payload: string; // String!
+      userId?: string | null; // String
     }
     signin: { // args
       password: string; // String!
