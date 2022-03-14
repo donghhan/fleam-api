@@ -21,3 +21,7 @@ export * from "./Photo/Query/Like.query";
 // Comment
 export * from "./Comment/Mutation/Comment.mutation";
 export * from "./Comment/Query/Comment.query";
+
+// Message
+export * from "./Message/Query/seeRoom.query";
+export * from "./Message/Mutation/createRoom.mutation";

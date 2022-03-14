@@ -44,6 +44,13 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  ChatRoom: { // root type
+    createdAt: string; // String!
+    id: string; // String!
+    messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
+    updatedAt: string; // String!
+    user?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+  }
   Comment: { // root type
     createdAt: string; // String!
     id: string; // String!
@@ -66,6 +73,14 @@ export interface NexusGenObjects {
     id: string; // String!
     photo: NexusGenRootTypes['Photo']; // Photo!
     updatedAt: string; // String!
+  }
+  Message: { // root type
+    createdAt: string; // String!
+    id: string; // String!
+    payload: string; // String!
+    room: NexusGenRootTypes['ChatRoom']; // ChatRoom!
+    updatedAt: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
   Mutation: {};
   Photo: { // root type
@@ -118,6 +133,13 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  ChatRoom: { // field return type
+    createdAt: string; // String!
+    id: string; // String!
+    messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
+    updatedAt: string; // String!
+    user: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+  }
   Comment: { // field return type
     createdAt: string; // String!
     id: string; // String!
@@ -143,6 +165,14 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     photo: NexusGenRootTypes['Photo']; // Photo!
     updatedAt: string; // String!
+  }
+  Message: { // field return type
+    createdAt: string; // String!
+    id: string; // String!
+    payload: string; // String!
+    room: NexusGenRootTypes['ChatRoom']; // ChatRoom!
+    updatedAt: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
@@ -181,6 +211,7 @@ export interface NexusGenFieldTypes {
     seePhoto: NexusGenRootTypes['Photo'] | null; // Photo
     seePhotoComments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
     seeProfile: NexusGenRootTypes['User'] | null; // User
+    seeRooms: Array<NexusGenRootTypes['ChatRoom'] | null> | null; // [ChatRoom]
   }
   SeeFollowerResult: { // field return type
     error: string | null; // String
@@ -221,6 +252,13 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  ChatRoom: { // field return type name
+    createdAt: 'String'
+    id: 'String'
+    messages: 'Message'
+    updatedAt: 'String'
+    user: 'User'
+  }
   Comment: { // field return type name
     createdAt: 'String'
     id: 'String'
@@ -246,6 +284,14 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     photo: 'Photo'
     updatedAt: 'String'
+  }
+  Message: { // field return type name
+    createdAt: 'String'
+    id: 'String'
+    payload: 'String'
+    room: 'ChatRoom'
+    updatedAt: 'String'
+    user: 'User'
   }
   Mutation: { // field return type name
     createAccount: 'User'
@@ -284,6 +330,7 @@ export interface NexusGenFieldTypeNames {
     seePhoto: 'Photo'
     seePhotoComments: 'Comment'
     seeProfile: 'User'
+    seeRooms: 'ChatRoom'
   }
   SeeFollowerResult: { // field return type name
     error: 'String'

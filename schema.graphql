@@ -2,6 +2,15 @@
 ### Do not make changes to this file directly
 
 
+"""ChatRoom object type"""
+type ChatRoom {
+  createdAt: String!
+  id: String!
+  messages: [Message]
+  updatedAt: String!
+  user: [User]
+}
+
 """Comment object type"""
 type Comment {
   createdAt: String!
@@ -35,6 +44,16 @@ type Like {
   id: String!
   photo: Photo!
   updatedAt: String!
+}
+
+"""Message object type"""
+type Message {
+  createdAt: String!
+  id: String!
+  payload: String!
+  room: ChatRoom!
+  updatedAt: String!
+  user: User!
 }
 
 type Mutation {
@@ -102,6 +121,9 @@ type Query {
 
   """Query field for viewing the user profile"""
   seeProfile(username: String!): User
+
+  """See Rooms Query"""
+  seeRooms: [ChatRoom]
 }
 
 type SeeFollowerResult {
