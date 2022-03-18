@@ -7,9 +7,12 @@ export * from "./User/Mutation/UserFollow.mutation";
 export * from "./User/Query/User.query";
 export * from "./User/Query/IsMyself.query";
 export * from "./User/Query/UserFollow.query";
+export * from "./User/Mutation/User.editProfile";
 
 // Photo Part
-export * from "./Photo/Mutation/Photo.mutation";
+export * from "./Photo/Mutation/deletePhoto.mutation";
+export * from "./Photo/Mutation/uploadPhoto.mutation";
+export * from "./Photo/Mutation/editPhoto.mutation";
 export * from "./Photo/Query/Photo.query";
 
 // Photo - Feed Part

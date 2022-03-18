@@ -437,7 +437,7 @@ export interface NexusGenArgTypes {
     }
     uploadPhoto: { // args
       caption?: string | null; // String
-      file: string; // String!
+      file: NexusGenScalars['Upload']; // Upload!
     }
   }
   Query: {

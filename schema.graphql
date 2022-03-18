@@ -78,7 +78,7 @@ type Mutation {
   unfollowUser(username: String!): GlobalResult
 
   """Upload Photo Mutation"""
-  uploadPhoto(caption: String, file: String!): Photo
+  uploadPhoto(caption: String, file: Upload!): Photo
 }
 
 """Photo object type"""
