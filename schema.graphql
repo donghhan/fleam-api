@@ -11,18 +11,6 @@ type ChatRoom {
   user: [User]
 }
 
-"""Comment object type"""
-type Comment {
-  createdAt: String!
-  id: String!
-
-  """Whether this photo belongs to user itself"""
-  isMyself: Boolean!
-  payload: String!
-  photo: Photo!
-  updatedAt: String!
-}
-
 type GlobalResult {
   error: String
   ok: Boolean!
@@ -33,16 +21,7 @@ type Hashtag {
   createdAt: String!
   hashtag: String!
   id: String!
-  photos(page: Int!): [Photo]
-  totalPhotos: Int
-  updatedAt: String!
-}
-
-"""Like object type"""
-type Like {
-  createdAt: String!
-  id: String!
-  photo: Photo!
+  products: [Product]
   updatedAt: String!
 }
 
@@ -58,13 +37,6 @@ type Message {
 
 type Mutation {
   createAccount(email: String!, firstName: String!, password: String!, username: String!): User
-  createComment(payload: String!, photoId: String!): GlobalResult
-  deleteComment(id: String!): GlobalResult
-  deletePhoto(id: String!): GlobalResult
-  editComment(id: String!, payload: String!): GlobalResult
-
-  """Edit Photo Mutation"""
-  editPhoto(caption: String!, id: String!): GlobalResult
   editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): GlobalResult
   followUser(username: String!): GlobalResult
   searchUsers(keyword: String!): [User]
@@ -72,58 +44,44 @@ type Mutation {
   """Send Message Mutation"""
   sendMessage(chatRoomId: String, payload: String!, userId: String): GlobalResult
   signin(password: String!, username: String!): SigninWithTokenResult
-
-  """Like Photo Mutation"""
-  toggleLike(id: String!): GlobalResult
   unfollowUser(username: String!): GlobalResult
 
-  """Upload Photo Mutation"""
-  uploadPhoto(caption: String, file: Upload!): Photo
+  """Upload Product Mutation"""
+  uploadProduct(age: Int, brand: String, category: String!, color: String!, condition: String!, description: String!, discountPrice: Float, domesticShippingCharge: Float, file: [String]!, isFreeShipping: Boolean!, isWorldWideShipping: Boolean!, location: String!, photos: [String!], price: Float!, size: String, worldwideShippingCharge: Float): Product
 }
 
-"""Photo object type"""
-type Photo {
-  caption: String
-
-  """Number of comments of the photo"""
-  comments: Int
+"""Product object type"""
+type Product {
+  age: Int
+  brand: String
+  category: String!
+  color: String!
+  condition: String!
   createdAt: String!
-  file: String!
+  description: String
+  discountPrice: Int
+  domesticShippingCharge: Int
   hashtags: [Hashtag]
   id: String!
-
-  """Whether this photo belongs to user itself"""
-  isMyself: Boolean!
-
-  """Number of likes of the photo"""
-  likes: Int!
+  isFreeShipping: Boolean!
+  isWorldWideShipping: Boolean!
+  location: String!
+  photos: [String]!
+  price: Int!
+  size: String!
   updatedAt: String!
   user: User!
+  worldwideShippingCharge: Int
 }
 
 type Query {
   """isMyself Query"""
   isMyself: User
-
-  """Search Photo Query"""
-  searchPhoto(keyword: String!): Photo
-
-  """See Feed Query"""
-  seeFeed: [Photo]
   seeFollowers(page: Int!, username: String!): SeeFollowerResult
   seeFollowings(cursor: Int, username: String!): SeeFollowingResult
 
-  """See Hashtag Query"""
-  seeHashtag(hashtag: String!): Hashtag
-
-  """See Like Query"""
-  seeLikes(id: String!): [User]
-
-  """See Photo Query"""
-  seePhoto(id: String!): Photo
-
-  """See Photo Comments Query"""
-  seePhotoComments(id: String!): [Comment]
+  """See Product Query"""
+  seeProduct(id: String!): Product
 
   """See Room Query"""
   seeRoom(id: String!): ChatRoom
@@ -175,7 +133,6 @@ type User {
   isFollowing: Boolean!
   isMyself: Boolean!
   password: String!
-  photos: [Photo]
   totalFollower: Int!
   totalFollowing: Int!
   updatedAt: String!

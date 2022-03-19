@@ -50,13 +50,6 @@ export interface NexusGenObjects {
     updatedAt: string; // String!
     user?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
-  Comment: { // root type
-    createdAt: string; // String!
-    id: string; // String!
-    payload: string; // String!
-    photo: NexusGenRootTypes['Photo']; // Photo!
-    updatedAt: string; // String!
-  }
   GlobalResult: { // root type
     error?: string | null; // String
     ok: boolean; // Boolean!
@@ -65,12 +58,7 @@ export interface NexusGenObjects {
     createdAt: string; // String!
     hashtag: string; // String!
     id: string; // String!
-    updatedAt: string; // String!
-  }
-  Like: { // root type
-    createdAt: string; // String!
-    id: string; // String!
-    photo: NexusGenRootTypes['Photo']; // Photo!
+    products?: Array<NexusGenRootTypes['Product'] | null> | null; // [Product]
     updatedAt: string; // String!
   }
   Message: { // root type
@@ -82,12 +70,25 @@ export interface NexusGenObjects {
     user: NexusGenRootTypes['User']; // User!
   }
   Mutation: {};
-  Photo: { // root type
-    caption?: string | null; // String
+  Product: { // root type
+    age?: number | null; // Int
+    brand?: string | null; // String
+    category: string; // String!
+    color: string; // String!
+    condition: string; // String!
     createdAt: string; // String!
-    file: string; // String!
+    description?: string | null; // String
+    discountPrice?: number | null; // Int
+    domesticShippingCharge?: number | null; // Int
     id: string; // String!
+    isFreeShipping: boolean; // Boolean!
+    isWorldWideShipping: boolean; // Boolean!
+    location: string; // String!
+    photos: Array<string | null>; // [String]!
+    price: number; // Int!
+    size: string; // String!
     updatedAt: string; // String!
+    worldwideShippingCharge?: number | null; // Int
   }
   Query: {};
   SeeFollowerResult: { // root type
@@ -139,14 +140,6 @@ export interface NexusGenFieldTypes {
     updatedAt: string; // String!
     user: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
-  Comment: { // field return type
-    createdAt: string; // String!
-    id: string; // String!
-    isMyself: boolean; // Boolean!
-    payload: string; // String!
-    photo: NexusGenRootTypes['Photo']; // Photo!
-    updatedAt: string; // String!
-  }
   GlobalResult: { // field return type
     error: string | null; // String
     ok: boolean; // Boolean!
@@ -155,14 +148,7 @@ export interface NexusGenFieldTypes {
     createdAt: string; // String!
     hashtag: string; // String!
     id: string; // String!
-    photos: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
-    totalPhotos: number | null; // Int
-    updatedAt: string; // String!
-  }
-  Like: { // field return type
-    createdAt: string; // String!
-    id: string; // String!
-    photo: NexusGenRootTypes['Photo']; // Photo!
+    products: Array<NexusGenRootTypes['Product'] | null> | null; // [Product]
     updatedAt: string; // String!
   }
   Message: { // field return type
@@ -175,42 +161,41 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['User'] | null; // User
-    createComment: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
-    deleteComment: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
-    deletePhoto: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
-    editComment: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
-    editPhoto: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     editProfile: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     followUser: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     sendMessage: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     signin: NexusGenRootTypes['SigninWithTokenResult'] | null; // SigninWithTokenResult
-    toggleLike: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     unfollowUser: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
-    uploadPhoto: NexusGenRootTypes['Photo'] | null; // Photo
+    uploadProduct: NexusGenRootTypes['Product'] | null; // Product
   }
-  Photo: { // field return type
-    caption: string | null; // String
-    comments: number | null; // Int
+  Product: { // field return type
+    age: number | null; // Int
+    brand: string | null; // String
+    category: string; // String!
+    color: string; // String!
+    condition: string; // String!
     createdAt: string; // String!
-    file: string; // String!
+    description: string | null; // String
+    discountPrice: number | null; // Int
+    domesticShippingCharge: number | null; // Int
     hashtags: Array<NexusGenRootTypes['Hashtag'] | null> | null; // [Hashtag]
     id: string; // String!
-    isMyself: boolean; // Boolean!
-    likes: number; // Int!
+    isFreeShipping: boolean; // Boolean!
+    isWorldWideShipping: boolean; // Boolean!
+    location: string; // String!
+    photos: Array<string | null>; // [String]!
+    price: number; // Int!
+    size: string; // String!
     updatedAt: string; // String!
     user: NexusGenRootTypes['User']; // User!
+    worldwideShippingCharge: number | null; // Int
   }
   Query: { // field return type
     isMyself: NexusGenRootTypes['User'] | null; // User
-    searchPhoto: NexusGenRootTypes['Photo'] | null; // Photo
-    seeFeed: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
     seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
-    seeHashtag: NexusGenRootTypes['Hashtag'] | null; // Hashtag
-    seeLikes: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    seePhoto: NexusGenRootTypes['Photo'] | null; // Photo
-    seePhotoComments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
+    seeProduct: NexusGenRootTypes['Product'] | null; // Product
     seeRoom: NexusGenRootTypes['ChatRoom'] | null; // ChatRoom
     seeRooms: Array<NexusGenRootTypes['ChatRoom'] | null> | null; // [ChatRoom]
   }
@@ -244,7 +229,6 @@ export interface NexusGenFieldTypes {
     isFollowing: boolean; // Boolean!
     isMyself: boolean; // Boolean!
     password: string; // String!
-    photos: Array<NexusGenRootTypes['Photo'] | null> | null; // [Photo]
     totalFollower: number; // Int!
     totalFollowing: number; // Int!
     updatedAt: string; // String!
@@ -260,14 +244,6 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'String'
     user: 'User'
   }
-  Comment: { // field return type name
-    createdAt: 'String'
-    id: 'String'
-    isMyself: 'Boolean'
-    payload: 'String'
-    photo: 'Photo'
-    updatedAt: 'String'
-  }
   GlobalResult: { // field return type name
     error: 'String'
     ok: 'Boolean'
@@ -276,14 +252,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'String'
     hashtag: 'String'
     id: 'String'
-    photos: 'Photo'
-    totalPhotos: 'Int'
-    updatedAt: 'String'
-  }
-  Like: { // field return type name
-    createdAt: 'String'
-    id: 'String'
-    photo: 'Photo'
+    products: 'Product'
     updatedAt: 'String'
   }
   Message: { // field return type name
@@ -296,42 +265,41 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createAccount: 'User'
-    createComment: 'GlobalResult'
-    deleteComment: 'GlobalResult'
-    deletePhoto: 'GlobalResult'
-    editComment: 'GlobalResult'
-    editPhoto: 'GlobalResult'
     editProfile: 'GlobalResult'
     followUser: 'GlobalResult'
     searchUsers: 'User'
     sendMessage: 'GlobalResult'
     signin: 'SigninWithTokenResult'
-    toggleLike: 'GlobalResult'
     unfollowUser: 'GlobalResult'
-    uploadPhoto: 'Photo'
+    uploadProduct: 'Product'
   }
-  Photo: { // field return type name
-    caption: 'String'
-    comments: 'Int'
+  Product: { // field return type name
+    age: 'Int'
+    brand: 'String'
+    category: 'String'
+    color: 'String'
+    condition: 'String'
     createdAt: 'String'
-    file: 'String'
+    description: 'String'
+    discountPrice: 'Int'
+    domesticShippingCharge: 'Int'
     hashtags: 'Hashtag'
     id: 'String'
-    isMyself: 'Boolean'
-    likes: 'Int'
+    isFreeShipping: 'Boolean'
+    isWorldWideShipping: 'Boolean'
+    location: 'String'
+    photos: 'String'
+    price: 'Int'
+    size: 'String'
     updatedAt: 'String'
     user: 'User'
+    worldwideShippingCharge: 'Int'
   }
   Query: { // field return type name
     isMyself: 'User'
-    searchPhoto: 'Photo'
-    seeFeed: 'Photo'
     seeFollowers: 'SeeFollowerResult'
     seeFollowings: 'SeeFollowingResult'
-    seeHashtag: 'Hashtag'
-    seeLikes: 'User'
-    seePhoto: 'Photo'
-    seePhotoComments: 'Comment'
+    seeProduct: 'Product'
     seeRoom: 'ChatRoom'
     seeRooms: 'ChatRoom'
   }
@@ -365,7 +333,6 @@ export interface NexusGenFieldTypeNames {
     isFollowing: 'Boolean'
     isMyself: 'Boolean'
     password: 'String'
-    photos: 'Photo'
     totalFollower: 'Int'
     totalFollowing: 'Int'
     updatedAt: 'String'
@@ -374,35 +341,12 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
-  Hashtag: {
-    photos: { // args
-      page: number; // Int!
-    }
-  }
   Mutation: {
     createAccount: { // args
       email: string; // String!
       firstName: string; // String!
       password: string; // String!
       username: string; // String!
-    }
-    createComment: { // args
-      payload: string; // String!
-      photoId: string; // String!
-    }
-    deleteComment: { // args
-      id: string; // String!
-    }
-    deletePhoto: { // args
-      id: string; // String!
-    }
-    editComment: { // args
-      id: string; // String!
-      payload: string; // String!
-    }
-    editPhoto: { // args
-      caption: string; // String!
-      id: string; // String!
     }
     editProfile: { // args
       avatar?: NexusGenScalars['Upload'] | null; // Upload
@@ -426,21 +370,29 @@ export interface NexusGenArgTypes {
       password: string; // String!
       username: string; // String!
     }
-    toggleLike: { // args
-      id: string; // String!
-    }
     unfollowUser: { // args
       username: string; // String!
     }
-    uploadPhoto: { // args
-      caption?: string | null; // String
-      file: NexusGenScalars['Upload']; // Upload!
+    uploadProduct: { // args
+      age?: number | null; // Int
+      brand?: string | null; // String
+      category: string; // String!
+      color: string; // String!
+      condition: string; // String!
+      description: string; // String!
+      discountPrice?: number | null; // Float
+      domesticShippingCharge?: number | null; // Float
+      file: Array<string | null>; // [String]!
+      isFreeShipping: boolean; // Boolean!
+      isWorldWideShipping: boolean; // Boolean!
+      location: string; // String!
+      photos?: string[] | null; // [String!]
+      price: number; // Float!
+      size?: string | null; // String
+      worldwideShippingCharge?: number | null; // Float
     }
   }
   Query: {
-    searchPhoto: { // args
-      keyword: string; // String!
-    }
     seeFollowers: { // args
       page: number; // Int!
       username: string; // String!
@@ -449,16 +401,7 @@ export interface NexusGenArgTypes {
       cursor?: number | null; // Int
       username: string; // String!
     }
-    seeHashtag: { // args
-      hashtag: string; // String!
-    }
-    seeLikes: { // args
-      id: string; // String!
-    }
-    seePhoto: { // args
-      id: string; // String!
-    }
-    seePhotoComments: { // args
+    seeProduct: { // args
       id: string; // String!
     }
     seeRoom: { // args

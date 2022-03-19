@@ -22,55 +22,18 @@ model User {
   bio       String?
   followers User[]     @relation("FollowRelation", references: [id])
   following User[]     @relation("FollowRelation", references: [id])
-  photos    Photo[]
-  likes     Like[]
-  comments  Comment[]
   chatrooms ChatRoom[]
   messages  Message[]
-}
-
-model Photo {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String
-  file      String
-  caption   String?
-  hashtags  Hashtag[]
-  likes     Like[]
-  comments  Comment[]
+  products  Product[]
 }
 
 model Hashtag {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  hashtag   String   @unique
-  photos    Photo[]
-}
-
-model Like {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  photo     Photo    @relation(fields: [photoId], references: [id])
-  photoId   String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-
-  @@unique([photoId, userId])
-}
-
-model Comment {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  photo     Photo    @relation(fields: [photoId], references: [id])
-  photoId   String
-  payload   String
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  product   Product[]
+  productId String?
+  hashtag   String    @unique
 }
 
 model ChatRoom {
@@ -90,4 +53,28 @@ model Message {
   userId     String
   room       ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
+}
+
+model Product {
+  id                      String    @id @default(cuid())
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  user                    User      @relation(fields: [userId], references: [id])
+  userId                  String
+  condition               String
+  price                   Float
+  discountPrice           Float?
+  color                   String
+  size                    String?
+  description             String
+  age                     Int?
+  brand                   String?
+  category                String
+  isFreeShipping          Boolean
+  domesticShippingCharge  Float?
+  worldwideShippingCharge Float?
+  isWorldWideShipping     Boolean
+  location                String
+  photos                  String[]
+  hashtags                Hashtag[]
 }

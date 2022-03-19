@@ -18,7 +18,6 @@ export const User = objectType({
     t.nonNull.string("updatedAt");
     t.list.field("following", { type: User });
     t.list.field("followers", { type: User });
-    t.list.field("photos", { type: Photo });
     t.nonNull.boolean("isFollowing", {
       async resolve({ id }, _, { signedInUser }) {
         if (!signedInUser) {
@@ -56,13 +55,6 @@ export const User = objectType({
         return client.user.count({ where: { following: { some: { id } } } });
       },
     });
-    // Photo resolver
-    t.list.field("photos", {
-      type: Photo,
-      resolve({ id }) {
-        return client.user.findUnique({ where: { id } }).photos();
-      },
-    });
   },
 });
 
@@ -74,9 +66,6 @@ export const SigninWithTokenResult = objectType({
     t.nonNull.boolean("ok"), t.string("error"), t.string("token");
   },
 });
-
-// scalarType for file uploads
-export const Upload = asNexusMethod(GraphQLUpload, "upload");
 
 // Global Result Type
 export const GlobalResult = objectType({
@@ -133,118 +122,6 @@ export const SeeFollowingResult = objectType({
           where: { followers: { id } },
         });
         return totalFollowings.length;
-      },
-    });
-  },
-});
-
-// Photo Type
-export const Photo = objectType({
-  name: "Photo",
-  description: "Photo object type",
-  definition(t) {
-    t.nonNull.string("id");
-    t.nonNull.list.field("user", { type: User });
-    t.nonNull.string("file");
-    t.string("caption");
-    t.list.field("hashtags", { type: Hashtag });
-    t.nonNull.string("createdAt");
-    t.nonNull.string("updatedAt");
-    t.nonNull.int("comments");
-    t.nonNull.field("user", {
-      type: User,
-      resolve({ userId }) {
-        return client.user.findUnique({ where: { id: userId } });
-      },
-    });
-    t.list.field("hashtags", {
-      type: Hashtag,
-      resolve({ id }) {
-        return client.hashtag.findMany({ where: { photos: { some: { id } } } });
-      },
-    });
-    // Likes resolver in Photo
-    t.nonNull.int("likes", {
-      description: "Number of likes of the photo",
-      resolve: ({ id }) => client.like.count({ where: { photoId: id } }),
-    });
-    // isMyself computed field
-    t.nonNull.boolean("isMyself", {
-      description: "Whether this photo belongs to user itself",
-      resolve: ({ userId }, _, { signedInUser }) => {
-        if (!signedInUser) {
-          return false;
-        }
-        return userId === signedInUser.id;
-      },
-    });
-    // Comment computed field
-    t.int("comments", {
-      description: "Number of comments of the photo",
-      resolve: ({ id }) => {
-        return client.comment.count({ where: { photoId: id } });
-      },
-    });
-  },
-});
-
-// Hashtag Type
-export const Hashtag = objectType({
-  name: "Hashtag",
-  description: "Hashtag object type",
-  definition(t) {
-    t.nonNull.string("id");
-    t.nonNull.string("hashtag");
-    t.nonNull.string("createdAt");
-    t.nonNull.string("updatedAt");
-    t.list.field("photos", {
-      type: Photo,
-      args: { page: nonNull(intArg()) },
-      resolve({ id }, args) {
-        console.log(args);
-        return client.hashtag.findUnique({ where: { id } }).photos();
-      },
-    });
-    // Computed field for calculating total photos with the hashtag
-    t.int("totalPhotos", {
-      resolve({ id }) {
-        return client.photo.count({ where: { hashtags: { some: { id } } } });
-      },
-    });
-  },
-});
-
-// Like Type
-export const Like = objectType({
-  name: "Like",
-  description: "Like object type",
-  definition(t) {
-    t.nonNull.string("id");
-    t.nonNull.string("createdAt");
-    t.nonNull.string("updatedAt");
-    t.nonNull.field("photo", { type: Photo });
-  },
-});
-
-// Comment Type
-export const Comment = objectType({
-  name: "Comment",
-  description: "Comment object type",
-  definition(t) {
-    t.nonNull.string("id");
-    t.nonNull.string("createdAt");
-    t.nonNull.string("updatedAt");
-    t.nonNull.string("payload");
-    t.nonNull.field("photo", { type: Photo });
-    t.nonNull.boolean("isMyself");
-    // isMyself computed field
-    t.nonNull.boolean("isMyself", {
-      description: "Whether this photo belongs to user itself",
-      resolve: ({ userId }, _, { signedInUser }) => {
-        if (!signedInUser) {
-          return false;
-        }
-        return userId === signedInUser.id;
       },
     });
   },

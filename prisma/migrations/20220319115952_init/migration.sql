@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Product" ALTER COLUMN "color" SET NOT NULL,
+ALTER COLUMN "color" SET DATA TYPE TEXT;

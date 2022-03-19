@@ -1,5 +1,6 @@
 // Type Definition
 export * from "./typeDef";
+export * from "./Product/Product.typeDef";
 
 // User Part
 export * from "./User/Mutation/createAccount.mutation";
@@ -9,22 +10,12 @@ export * from "./User/Query/IsMyself.query";
 export * from "./User/Query/UserFollow.query";
 export * from "./User/Mutation/editProfile.mutation";
 
-// Photo Part
-export * from "./Photo/Mutation/deletePhoto.mutation";
-export * from "./Photo/Mutation/uploadPhoto.mutation";
-export * from "./Photo/Mutation/editPhoto.mutation";
-export * from "./Photo/Query/Photo.query";
-
-// Photo - Feed Part
-export * from "./Photo/Query/Feed.query";
-
-// Photo - Like Part
-export * from "./Photo/Mutation/Like.mutation";
-export * from "./Photo/Query/Like.query";
-
-// Comment
-export * from "./Comment/Mutation/Comment.mutation";
-export * from "./Comment/Query/Comment.query";
+// Product
+export * from "./Product/Product.typeDef";
+// Product - Mutation
+export * from "./Product/Mutation/uploadProduct.mutation";
+// Product - Query
+export * from "./Product/Query/seeProduct.query";
 
 // Message
 export * from "./Message/Query/seeRooms.query";
