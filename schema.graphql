@@ -47,7 +47,7 @@ type Mutation {
   unfollowUser(username: String!): GlobalResult
 
   """Upload Product Mutation"""
-  uploadProduct(age: Int, brand: String, category: String!, color: String!, condition: String!, description: String!, discountPrice: Float, domesticShippingCharge: Float, file: [String]!, isFreeShipping: Boolean!, isWorldWideShipping: Boolean!, location: String!, photos: [String!], price: Float!, size: String, worldwideShippingCharge: Float): Product
+  uploadProduct(age: Int, brand: String, category: String!, color: String!, condition: String!, description: String!, discountPrice: Float, domesticShippingCharge: Float, file: [String]!, isFreeShipping: Boolean!, isWorldWideShipping: Boolean!, location: String!, name: String!, photos: [String!], price: Float!, size: String, worldwideShippingCharge: Float): Product
 }
 
 """Product object type"""
@@ -66,11 +66,12 @@ type Product {
   isFreeShipping: Boolean!
   isWorldWideShipping: Boolean!
   location: String!
+  name: String!
   photos: [String]!
   price: Int!
   size: String!
   updatedAt: String!
-  user: User!
+  user: User
   worldwideShippingCharge: Int
 }
 

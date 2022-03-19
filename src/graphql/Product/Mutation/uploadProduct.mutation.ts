@@ -41,6 +41,7 @@ export const UploadProductMutation = mutationField("uploadProduct", {
     worldwideShippingCharge: floatArg(),
     location: nonNull(stringArg()),
     photos: list(nonNull(stringArg())),
+    name: nonNull(stringArg()),
   },
   resolve: protectorResolver(
     async (
@@ -56,6 +57,7 @@ export const UploadProductMutation = mutationField("uploadProduct", {
         isWorldWideShipping,
         location,
         condition,
+        name,
       },
       { signedInUser }
     ) => {
@@ -77,6 +79,7 @@ export const UploadProductMutation = mutationField("uploadProduct", {
           isFreeShipping,
           isWorldWideShipping,
           location,
+          name,
           condition,
           user: {
             connect: {

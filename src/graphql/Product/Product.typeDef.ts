@@ -8,6 +8,7 @@ export const Product = objectType({
   description: "Product object type",
   definition(t) {
     t.nonNull.string("id");
+    t.nonNull.string("name");
     t.nonNull.string("createdAt");
     t.nonNull.string("updatedAt");
     t.nonNull.int("price");
@@ -26,7 +27,7 @@ export const Product = objectType({
     t.nonNull.string("condition");
     t.field("user", { type: "User" });
     t.nonNull.list.string("photos");
-    t.nonNull.field("user", {
+    t.field("user", {
       type: "User",
       resolve({ userId }) {
         return client.user.findUnique({ where: { id: userId } });

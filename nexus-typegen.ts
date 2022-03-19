@@ -84,6 +84,7 @@ export interface NexusGenObjects {
     isFreeShipping: boolean; // Boolean!
     isWorldWideShipping: boolean; // Boolean!
     location: string; // String!
+    name: string; // String!
     photos: Array<string | null>; // [String]!
     price: number; // Int!
     size: string; // String!
@@ -184,11 +185,12 @@ export interface NexusGenFieldTypes {
     isFreeShipping: boolean; // Boolean!
     isWorldWideShipping: boolean; // Boolean!
     location: string; // String!
+    name: string; // String!
     photos: Array<string | null>; // [String]!
     price: number; // Int!
     size: string; // String!
     updatedAt: string; // String!
-    user: NexusGenRootTypes['User']; // User!
+    user: NexusGenRootTypes['User'] | null; // User
     worldwideShippingCharge: number | null; // Int
   }
   Query: { // field return type
@@ -288,6 +290,7 @@ export interface NexusGenFieldTypeNames {
     isFreeShipping: 'Boolean'
     isWorldWideShipping: 'Boolean'
     location: 'String'
+    name: 'String'
     photos: 'String'
     price: 'Int'
     size: 'String'
@@ -386,6 +389,7 @@ export interface NexusGenArgTypes {
       isFreeShipping: boolean; // Boolean!
       isWorldWideShipping: boolean; // Boolean!
       location: string; // String!
+      name: string; // String!
       photos?: string[] | null; // [String!]
       price: number; // Float!
       size?: string | null; // String
