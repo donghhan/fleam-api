@@ -125,9 +125,6 @@ type Query {
   """See Photo Comments Query"""
   seePhotoComments(id: String!): [Comment]
 
-  """Query field for viewing the user profile"""
-  seeProfile(username: String!): User
-
   """See Room Query"""
   seeRoom(id: String!): ChatRoom
 

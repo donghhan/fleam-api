@@ -2,12 +2,12 @@
 export * from "./typeDef";
 
 // User Part
-export * from "./User/Mutation/User.mutation";
+export * from "./User/Mutation/createAccount.mutation";
+export * from "./User/Mutation/signin.mutation";
 export * from "./User/Mutation/UserFollow.mutation";
-export * from "./User/Query/User.query";
 export * from "./User/Query/IsMyself.query";
 export * from "./User/Query/UserFollow.query";
-export * from "./User/Mutation/User.editProfile";
+export * from "./User/Mutation/editProfile.mutation";
 
 // Photo Part
 export * from "./Photo/Mutation/deletePhoto.mutation";

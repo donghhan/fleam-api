@@ -1,59 +1,8 @@
-import { createWriteStream } from "fs";
-import { nonNull, stringArg, mutationField, arg } from "nexus";
+import { nonNull, stringArg, mutationField } from "nexus";
 import bcrypt from "bcrypt";
 import client from "../../../client";
-import jwt from "jsonwebtoken";
 // Secret Key
 import { FLEAM_SECRET_KEY } from "../../../utils/keys";
-import { protectorResolver } from "../../../utils/user.utils";
-
-// Signin Mutation
-export const SigninMutation = mutationField("signin", {
-  type: "SigninWithTokenResult",
-  args: {
-    username: nonNull(stringArg()),
-    password: nonNull(stringArg()),
-  },
-  async resolve(_, { username, password }) {
-    // Finding user with username
-    const registeredUser = await client.user.findFirst({
-      where: {
-        username,
-      },
-    });
-
-    if (!registeredUser) {
-      return {
-        ok: false,
-        error: "There is no user with that username.",
-      };
-    }
-
-    // Check password
-    const comparePassword = await bcrypt.compare(
-      password,
-      registeredUser.password
-    );
-
-    if (!comparePassword) {
-      return {
-        ok: false,
-        error: "Password is not correct.",
-      };
-    }
-
-    // Issue a token and send it to the user
-    const token = await jwt.sign(
-      { id: registeredUser.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 },
-      FLEAM_SECRET_KEY
-    );
-
-    return {
-      ok: true,
-      token,
-    };
-  },
-});
 
 // createAccount Mutation
 export const CreateAccountMutation = mutationField("createAccount", {

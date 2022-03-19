@@ -4,7 +4,6 @@
  */
 
 
-import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 import type { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
@@ -212,7 +211,6 @@ export interface NexusGenFieldTypes {
     seeLikes: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     seePhoto: NexusGenRootTypes['Photo'] | null; // Photo
     seePhotoComments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
-    seeProfile: NexusGenRootTypes['User'] | null; // User
     seeRoom: NexusGenRootTypes['ChatRoom'] | null; // ChatRoom
     seeRooms: Array<NexusGenRootTypes['ChatRoom'] | null> | null; // [ChatRoom]
   }
@@ -334,7 +332,6 @@ export interface NexusGenFieldTypeNames {
     seeLikes: 'User'
     seePhoto: 'Photo'
     seePhotoComments: 'Comment'
-    seeProfile: 'User'
     seeRoom: 'ChatRoom'
     seeRooms: 'ChatRoom'
   }
@@ -464,9 +461,6 @@ export interface NexusGenArgTypes {
     seePhotoComments: { // args
       id: string; // String!
     }
-    seeProfile: { // args
-      username: string; // String!
-    }
     seeRoom: { // args
       id: string; // String!
     }
@@ -536,15 +530,6 @@ declare global {
   interface NexusGenPluginInputTypeConfig<TypeName extends string> {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
-    /**
-     * Authorization for an individual field. Returning "true"
-     * or "Promise<true>" means the field can be accessed.
-     * Returning "false" or "Promise<false>" will respond
-     * with a "Not Authorized" error for the field.
-     * Returning or throwing an error will also prevent the
-     * resolver from executing.
-     */
-    authorize?: FieldAuthorizeResolver<TypeName, FieldName>
   }
   interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
   }
