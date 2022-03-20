@@ -22,7 +22,7 @@ export const CreateAccountMutation = mutationField("createAccount", {
     });
 
     if (alreadyExistingUser) {
-      throw new Error("This username/password is already taken.");
+      throw new Error("This username/email is already taken.");
     }
 
     // Validation REGEX
