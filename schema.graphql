@@ -21,7 +21,8 @@ type Hashtag {
   createdAt: String!
   hashtag: String!
   id: String!
-  products: [Product]
+  products(page: Int!): [Product]
+  totalProducts: Int
   updatedAt: String!
 }
 
@@ -80,6 +81,7 @@ type Query {
   isMyself: User
   seeFollowers(page: Int!, username: String!): SeeFollowerResult
   seeFollowings(cursor: Int, username: String!): SeeFollowingResult
+  seeHashtag(hashtag: String!): Hashtag
 
   """See Product Query"""
   seeProduct(id: String!): Product

@@ -56,6 +56,19 @@ export const Hashtag = objectType({
     t.nonNull.string("createdAt");
     t.nonNull.string("updatedAt");
     t.nonNull.string("hashtag");
-    t.list.field("products", { type: "Product" });
+    t.list.field("products", {
+      type: "Product",
+      args: { page: nonNull(intArg()) },
+      resolve({ id }, args) {
+        console.log(args);
+        return client.hashtag.findUnique({ where: { id } }).products();
+      },
+    });
+    t.field("totalProducts", {
+      type: "Int",
+      resolve({ id }, args) {
+        return client.product.count({ where: { hashtags: { some: { id } } } });
+      },
+    });
   },
 });

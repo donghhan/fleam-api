@@ -16,6 +16,7 @@ export * from "./Product/Product.typeDef";
 export * from "./Product/Mutation/uploadProduct.mutation";
 // Product - Query
 export * from "./Product/Query/seeProduct.query";
+export * from "./Product/Query/seeHashtag.query";
 
 // Message
 export * from "./Message/Query/seeRooms.query";

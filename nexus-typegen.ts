@@ -58,7 +58,6 @@ export interface NexusGenObjects {
     createdAt: string; // String!
     hashtag: string; // String!
     id: string; // String!
-    products?: Array<NexusGenRootTypes['Product'] | null> | null; // [Product]
     updatedAt: string; // String!
   }
   Message: { // root type
@@ -150,6 +149,7 @@ export interface NexusGenFieldTypes {
     hashtag: string; // String!
     id: string; // String!
     products: Array<NexusGenRootTypes['Product'] | null> | null; // [Product]
+    totalProducts: number | null; // Int
     updatedAt: string; // String!
   }
   Message: { // field return type
@@ -197,6 +197,7 @@ export interface NexusGenFieldTypes {
     isMyself: NexusGenRootTypes['User'] | null; // User
     seeFollowers: NexusGenRootTypes['SeeFollowerResult'] | null; // SeeFollowerResult
     seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
+    seeHashtag: NexusGenRootTypes['Hashtag'] | null; // Hashtag
     seeProduct: NexusGenRootTypes['Product'] | null; // Product
     seeRoom: NexusGenRootTypes['ChatRoom'] | null; // ChatRoom
     seeRooms: Array<NexusGenRootTypes['ChatRoom'] | null> | null; // [ChatRoom]
@@ -255,6 +256,7 @@ export interface NexusGenFieldTypeNames {
     hashtag: 'String'
     id: 'String'
     products: 'Product'
+    totalProducts: 'Int'
     updatedAt: 'String'
   }
   Message: { // field return type name
@@ -302,6 +304,7 @@ export interface NexusGenFieldTypeNames {
     isMyself: 'User'
     seeFollowers: 'SeeFollowerResult'
     seeFollowings: 'SeeFollowingResult'
+    seeHashtag: 'Hashtag'
     seeProduct: 'Product'
     seeRoom: 'ChatRoom'
     seeRooms: 'ChatRoom'
@@ -344,6 +347,11 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Hashtag: {
+    products: { // args
+      page: number; // Int!
+    }
+  }
   Mutation: {
     createAccount: { // args
       email: string; // String!
@@ -404,6 +412,9 @@ export interface NexusGenArgTypes {
     seeFollowings: { // args
       cursor?: number | null; // Int
       username: string; // String!
+    }
+    seeHashtag: { // args
+      hashtag: string; // String!
     }
     seeProduct: { // args
       id: string; // String!
