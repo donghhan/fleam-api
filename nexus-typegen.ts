@@ -161,7 +161,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Mutation: { // field return type
-    createAccount: NexusGenRootTypes['User'] | null; // User
+    createAccount: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     editProfile: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     followUser: NexusGenRootTypes['GlobalResult'] | null; // GlobalResult
     searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
@@ -268,7 +268,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Mutation: { // field return type name
-    createAccount: 'User'
+    createAccount: 'GlobalResult'
     editProfile: 'GlobalResult'
     followUser: 'GlobalResult'
     searchUsers: 'User'

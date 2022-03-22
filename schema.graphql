@@ -37,7 +37,7 @@ type Message {
 }
 
 type Mutation {
-  createAccount(email: String!, firstName: String!, password: String!, username: String!): User
+  createAccount(email: String!, firstName: String!, password: String!, username: String!): GlobalResult
   editProfile(avatar: Upload, bio: String, email: String, firstName: String, password: String): GlobalResult
   followUser(username: String!): GlobalResult
   searchUsers(keyword: String!): [User]
