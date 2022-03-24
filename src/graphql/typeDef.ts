@@ -1,5 +1,4 @@
-import { asNexusMethod, objectType, nonNull, intArg } from "nexus";
-import { GraphQLUpload } from "graphql-upload";
+import { objectType } from "nexus";
 import client from "../client";
 
 // User Type
@@ -58,12 +57,23 @@ export const User = objectType({
   },
 });
 
-// OkResult
+// SigninWithTokenResult
 export const SigninWithTokenResult = objectType({
   name: "SigninWithTokenResult",
   description: "Object type for showing success/failure of signin & signup",
   definition(t) {
     t.nonNull.boolean("ok"), t.string("error"), t.string("token");
+  },
+});
+
+// SignupErrorResult
+export const SignupResult = objectType({
+  name: "SignupResult",
+  description: "Signup Result object type",
+  definition(t) {
+    t.nonNull.boolean("ok");
+    t.string("errorType");
+    t.string("error");
   },
 });
 

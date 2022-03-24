@@ -1,3 +1,4 @@
+import { uploadPhoto } from "./../../../utils/public.utils";
 import {
   nonNull,
   stringArg,
@@ -25,7 +26,6 @@ export const UploadProductMutation = mutationField("uploadProduct", {
   type: "Product",
   description: "Upload Product Mutation",
   args: {
-    file: nonNull(list(stringArg())),
     condition: nonNull(stringArg()),
     price: nonNull(floatArg()),
     discountPrice: floatArg(),
@@ -40,7 +40,7 @@ export const UploadProductMutation = mutationField("uploadProduct", {
     isWorldWideShipping: nonNull(booleanArg()),
     worldwideShippingCharge: floatArg(),
     location: nonNull(stringArg()),
-    photos: list(nonNull(stringArg())),
+    photos: arg({ type: list("Upload") }),
     name: nonNull(stringArg()),
   },
   resolve: protectorResolver(
@@ -62,15 +62,22 @@ export const UploadProductMutation = mutationField("uploadProduct", {
       { signedInUser }
     ) => {
       let hashtagObj: any | null = [];
+      let photoURL: string | null = null;
 
       // Parse description and get or create hashtags
       if (description) {
         hashtagObj = connectHashtags(description);
       }
 
+      const photosURL = await uploadPhoto(
+        photos,
+        signedInUser.id,
+        "productPhotos"
+      );
+
       return client.product.create({
         data: {
-          photos,
+          photos: photoURL,
           description,
           size,
           color,

@@ -107,6 +107,11 @@ export interface NexusGenObjects {
     ok: boolean; // Boolean!
     token?: string | null; // String
   }
+  SignupResult: { // root type
+    error?: string | null; // String
+    errorType?: string | null; // String
+    ok: boolean; // Boolean!
+  }
   User: { // root type
     avatar?: string | null; // String
     bio?: string | null; // String
@@ -220,6 +225,11 @@ export interface NexusGenFieldTypes {
     ok: boolean; // Boolean!
     token: string | null; // String
   }
+  SignupResult: { // field return type
+    error: string | null; // String
+    errorType: string | null; // String
+    ok: boolean; // Boolean!
+  }
   User: { // field return type
     avatar: string | null; // String
     bio: string | null; // String
@@ -327,6 +337,11 @@ export interface NexusGenFieldTypeNames {
     ok: 'Boolean'
     token: 'String'
   }
+  SignupResult: { // field return type name
+    error: 'String'
+    errorType: 'String'
+    ok: 'Boolean'
+  }
   User: { // field return type name
     avatar: 'String'
     bio: 'String'
@@ -393,12 +408,11 @@ export interface NexusGenArgTypes {
       description: string; // String!
       discountPrice?: number | null; // Float
       domesticShippingCharge?: number | null; // Float
-      file: Array<string | null>; // [String]!
       isFreeShipping: boolean; // Boolean!
       isWorldWideShipping: boolean; // Boolean!
       location: string; // String!
       name: string; // String!
-      photos?: string[] | null; // [String!]
+      photos?: Array<NexusGenScalars['Upload'] | null> | null; // [Upload]
       price: number; // Float!
       size?: string | null; // String
       worldwideShippingCharge?: number | null; // Float

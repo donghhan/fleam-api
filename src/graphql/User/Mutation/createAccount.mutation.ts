@@ -1,6 +1,7 @@
 import { nonNull, stringArg, mutationField } from "nexus";
 import bcrypt from "bcrypt";
 import client from "../../../client";
+import { UserInputError } from "apollo-server-express";
 
 // createAccount Mutation
 export const CreateAccountMutation = mutationField("createAccount", {
@@ -12,26 +13,40 @@ export const CreateAccountMutation = mutationField("createAccount", {
     password: nonNull(stringArg()),
   },
   async resolve(_, { firstName, username, email, password }) {
+    const errors: { property: string; message: string }[] = [];
     // Check if username or email already exists
     const userExistsWithUsername = await client.user.findFirst({
       where: {
         username,
       },
     });
+
+    if (userExistsWithUsername) {
+      errors.push({
+        property: "username",
+        message: "This username is already taken.",
+      });
+      // return {
+      //   ok: false,
+      //   error: "This username is already taken.",
+      // };
+    }
+
     const userExistsWithEmail = await client.user.findFirst({
       where: { email },
     });
 
-    if (userExistsWithUsername) {
-      return {
-        ok: false,
-        error: "This username is already taken.",
-      };
-    } else if (userExistsWithEmail) {
-      return {
-        ok: false,
-        error: "This email is already taken.",
-      };
+    if (userExistsWithEmail) {
+      errors.push({
+        property: "email",
+        message: "This email is already taken.",
+      });
+    }
+
+    if (errors.length) {
+      throw new UserInputError("Invalid input.", {
+        errors,
+      });
     }
 
     // Validation REGEX

@@ -48,7 +48,7 @@ type Mutation {
   unfollowUser(username: String!): GlobalResult
 
   """Upload Product Mutation"""
-  uploadProduct(age: Int, brand: String, category: String!, color: String!, condition: String!, description: String!, discountPrice: Float, domesticShippingCharge: Float, file: [String]!, isFreeShipping: Boolean!, isWorldWideShipping: Boolean!, location: String!, name: String!, photos: [String!], price: Float!, size: String, worldwideShippingCharge: Float): Product
+  uploadProduct(age: Int, brand: String, category: String!, color: String!, condition: String!, description: String!, discountPrice: Float, domesticShippingCharge: Float, isFreeShipping: Boolean!, isWorldWideShipping: Boolean!, location: String!, name: String!, photos: [Upload], price: Float!, size: String, worldwideShippingCharge: Float): Product
 }
 
 """Product object type"""
@@ -118,6 +118,13 @@ type SigninWithTokenResult {
   error: String
   ok: Boolean!
   token: String
+}
+
+"""Signup Result object type"""
+type SignupResult {
+  error: String
+  errorType: String
+  ok: Boolean!
 }
 
 """The `Upload` scalar type represents a file upload."""

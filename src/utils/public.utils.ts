@@ -20,7 +20,7 @@ export const uploadPhoto = async (
       Bucket: "fleam-image-upload",
       Key: saveName,
       ACL: "public-read-write",
-      Body: readStream,
+      Body: readStream, // file stream
     })
     .promise();
   return Location;
