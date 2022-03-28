@@ -26,10 +26,6 @@ export const CreateAccountMutation = mutationField("createAccount", {
         property: "username",
         message: "This username is already taken.",
       });
-      // return {
-      //   ok: false,
-      //   error: "This username is already taken.",
-      // };
     }
 
     const userExistsWithEmail = await client.user.findFirst({
@@ -44,16 +40,14 @@ export const CreateAccountMutation = mutationField("createAccount", {
     }
 
     if (errors.length) {
-      throw new UserInputError("Invalid input.", {
-        errors,
-      });
+      throw new UserInputError("Invalid input.", { errors });
     }
 
     // Validation REGEX
     const REGEX = {
       EMAIL: /\S+@\S+\.\S+/,
       PASSWORD:
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/,
     };
 
     // Email Validation
