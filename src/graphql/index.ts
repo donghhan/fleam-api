@@ -8,6 +8,7 @@ export * from "./User/Mutation/signin.mutation";
 export * from "./User/Mutation/UserFollow.mutation";
 export * from "./User/Query/IsMyself.query";
 export * from "./User/Query/UserFollow.query";
+export * from "./User/Query/seeProfile.query";
 export * from "./User/Mutation/editProfile.mutation";
 
 // Product

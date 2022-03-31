@@ -86,6 +86,9 @@ type Query {
   """See Product Query"""
   seeProduct(id: String!): Product
 
+  """Query field for viewing the user profile"""
+  seeProfile(username: String!): User
+
   """See Room Query"""
   seeRoom(id: String!): ChatRoom
 

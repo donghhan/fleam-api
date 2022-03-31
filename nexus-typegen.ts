@@ -204,6 +204,7 @@ export interface NexusGenFieldTypes {
     seeFollowings: NexusGenRootTypes['SeeFollowingResult'] | null; // SeeFollowingResult
     seeHashtag: NexusGenRootTypes['Hashtag'] | null; // Hashtag
     seeProduct: NexusGenRootTypes['Product'] | null; // Product
+    seeProfile: NexusGenRootTypes['User'] | null; // User
     seeRoom: NexusGenRootTypes['ChatRoom'] | null; // ChatRoom
     seeRooms: Array<NexusGenRootTypes['ChatRoom'] | null> | null; // [ChatRoom]
   }
@@ -316,6 +317,7 @@ export interface NexusGenFieldTypeNames {
     seeFollowings: 'SeeFollowingResult'
     seeHashtag: 'Hashtag'
     seeProduct: 'Product'
+    seeProfile: 'User'
     seeRoom: 'ChatRoom'
     seeRooms: 'ChatRoom'
   }
@@ -432,6 +434,9 @@ export interface NexusGenArgTypes {
     }
     seeProduct: { // args
       id: string; // String!
+    }
+    seeProfile: { // args
+      username: string; // String!
     }
     seeRoom: { // args
       id: string; // String!
