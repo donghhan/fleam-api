@@ -11,8 +11,8 @@ export const Product = objectType({
     t.nonNull.string("name");
     t.nonNull.string("createdAt");
     t.nonNull.string("updatedAt");
-    t.nonNull.int("price");
-    t.int("discountPrice");
+    t.nonNull.float("price");
+    t.float("discountPrice");
     t.string("brand");
     t.string("description");
     t.nonNull.string("size");

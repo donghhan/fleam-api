@@ -77,7 +77,7 @@ export interface NexusGenObjects {
     condition: string; // String!
     createdAt: string; // String!
     description?: string | null; // String
-    discountPrice?: number | null; // Int
+    discountPrice?: number | null; // Float
     domesticShippingCharge?: number | null; // Int
     id: string; // String!
     isFreeShipping: boolean; // Boolean!
@@ -85,7 +85,7 @@ export interface NexusGenObjects {
     location: string; // String!
     name: string; // String!
     photos: Array<string | null>; // [String]!
-    price: number; // Int!
+    price: number; // Float!
     size: string; // String!
     updatedAt: string; // String!
     worldwideShippingCharge?: number | null; // Int
@@ -183,7 +183,7 @@ export interface NexusGenFieldTypes {
     condition: string; // String!
     createdAt: string; // String!
     description: string | null; // String
-    discountPrice: number | null; // Int
+    discountPrice: number | null; // Float
     domesticShippingCharge: number | null; // Int
     hashtags: Array<NexusGenRootTypes['Hashtag'] | null> | null; // [Hashtag]
     id: string; // String!
@@ -192,7 +192,7 @@ export interface NexusGenFieldTypes {
     location: string; // String!
     name: string; // String!
     photos: Array<string | null>; // [String]!
-    price: number; // Int!
+    price: number; // Float!
     size: string; // String!
     updatedAt: string; // String!
     user: NexusGenRootTypes['User'] | null; // User
@@ -295,7 +295,7 @@ export interface NexusGenFieldTypeNames {
     condition: 'String'
     createdAt: 'String'
     description: 'String'
-    discountPrice: 'Int'
+    discountPrice: 'Float'
     domesticShippingCharge: 'Int'
     hashtags: 'Hashtag'
     id: 'String'
@@ -304,7 +304,7 @@ export interface NexusGenFieldTypeNames {
     location: 'String'
     name: 'String'
     photos: 'String'
-    price: 'Int'
+    price: 'Float'
     size: 'String'
     updatedAt: 'String'
     user: 'User'

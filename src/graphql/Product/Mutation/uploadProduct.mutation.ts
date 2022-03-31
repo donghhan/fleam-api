@@ -77,7 +77,7 @@ export const UploadProductMutation = mutationField("uploadProduct", {
 
       return client.product.create({
         data: {
-          photos: photoURL,
+          photos: photosURL,
           description,
           size,
           color,

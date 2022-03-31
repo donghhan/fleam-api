@@ -60,7 +60,7 @@ type Product {
   condition: String!
   createdAt: String!
   description: String
-  discountPrice: Int
+  discountPrice: Float
   domesticShippingCharge: Int
   hashtags: [Hashtag]
   id: String!
@@ -69,7 +69,7 @@ type Product {
   location: String!
   name: String!
   photos: [String]!
-  price: Int!
+  price: Float!
   size: String!
   updatedAt: String!
   user: User
