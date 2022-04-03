@@ -1,5 +1,5 @@
 import { objectType } from "nexus";
-import client from "../client";
+import client from "../../client";
 
 // User Type
 export const User = objectType({
@@ -77,15 +77,6 @@ export const SignupResult = objectType({
   },
 });
 
-// Global Result Type
-export const GlobalResult = objectType({
-  name: "GlobalResult",
-  definition(t) {
-    t.nonNull.boolean("ok");
-    t.string("error");
-  },
-});
-
 // objectType for followers pagination
 export const SeeFollowerResult = objectType({
   name: "SeeFollowerResult",
@@ -134,32 +125,5 @@ export const SeeFollowingResult = objectType({
         return totalFollowings.length;
       },
     });
-  },
-});
-
-// Message Type
-export const Message = objectType({
-  name: "Message",
-  description: "Message object type",
-  definition(t) {
-    t.nonNull.string("id");
-    t.nonNull.string("createdAt");
-    t.nonNull.string("updatedAt");
-    t.nonNull.string("payload");
-    t.nonNull.field("user", { type: "User" });
-    t.nonNull.field("room", { type: "ChatRoom" });
-  },
-});
-
-// ChatRoom Type
-export const ChatRoom = objectType({
-  name: "ChatRoom",
-  description: "ChatRoom object type",
-  definition(t) {
-    t.nonNull.string("id");
-    t.nonNull.string("createdAt");
-    t.nonNull.string("updatedAt");
-    t.list.field("user", { type: "User" });
-    t.list.field("messages", { type: "Message" });
   },
 });
